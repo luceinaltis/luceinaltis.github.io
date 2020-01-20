@@ -21,8 +21,8 @@ texture:
   title: Luce in altis
   tagline: 모든 일에 최선을 다하자
   date_format: "%b %-d, %Y"
-  style: black
-  showNav: false
+  style: blue
+  showNav: true
   showPicker: false
 
   # generate social links in footer
