@@ -1,0 +1,14 @@
+---
+layout: post
+title:  "백준 - 1517번, 버블소트"
+description: 
+date:   2020-01-21 21:03:36 +0530
+categories: C++ PS Algorithm
+---
+안녕하세요
+
+'''C++
+	if(a)
+'''
+
+잘가세요
