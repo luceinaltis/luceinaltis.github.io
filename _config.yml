@@ -5,10 +5,11 @@ theme: texture
 title: Luce in altis
 author: KIM KI HWAN
 email: luceinaltis2020@naver.com
-description: 설명 실험
+description: 컴퓨터 배우기
 
 show_excerpts: true # set to true to show excerpts on the homepage
 baseurl:
+url: luceinaltis.github.io
 
 
 # Minima date format
