@@ -5,6 +5,7 @@ description: 알고리즘 문제풀이
 date:   2020-01-23 21:03:36 +0530
 categories: C++ PS Algorithm
 ---
+
 ### 사용되는 알고리즘
 
 - Divide and Conquer
@@ -53,7 +54,6 @@ categories: C++ PS Algorithm
 ### 소스 코드
 
 <script src="https://gist.github.com/luceinaltis/fbd6cc7a48ea2dbf2aca875884b7b8db.js"></script>
-
 ### 참조
 
 - inversion count : [https://www.geeksforgeeks.org/counting-inversions/](https://www.geeksforgeeks.org/counting-inversions/)
