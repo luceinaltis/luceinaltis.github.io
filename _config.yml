@@ -20,7 +20,7 @@ sass:
 permalink: /posts/:title/
 texture:
   title: Luce in altis
-  tagline: 모든 일에 최선을 다하자
+  tagline: 열정에 기름 붓기
   date_format: "%b %-d, %Y"
   style: blue
   showNav: true
