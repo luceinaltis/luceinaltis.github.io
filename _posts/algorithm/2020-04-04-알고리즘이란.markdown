@@ -1,0 +1,87 @@
+---
+layout: page
+title:  "알고리즘이란?"
+categories: algorithm
+---
+## 알고리즘을 배워야 하는 이유
+
+1. 좋은 코드를 짤 수 있다.
+2. 빨리 짤 수 있다.
+
+---
+
+>  단, 배울때 고통이 큽니다.
+>
+> 힘듭니다
+>
+> > ㄴㅇ
+
+
+
+```cpp
+#include <iostream>
+using namespace std;
+
+int main()
+{
+	int a = 0;
+}
+```
+
+
+
+그러므로 열심히 합시다.
+
+`asdsadasd` asd
+
+하이라이트
+
+{%- highlight cpp linenos -%}
+
+#include <iostream>
+
+using namespace std;
+
+int main()
+
+{
+
+​	int a = 0;
+
+}
+
+{%- endhighlight -%}
+
+
+
+
+앞으로 방향성
+
+앞으로 방향성
+
+앞으로 방향성
+
+앞으로 방향성
+
+앞으로 방향성앞으로 방향성
+
+앞으로 방향성
+
+앞으로 방향성
+
+앞으로 방향성
+
+앞으로 방향성
+
+앞으로 방향성
+
+
+
+앞으로 방향성
+
+앞으로 방향성
+
+앞으로 방향성
+
+
+
