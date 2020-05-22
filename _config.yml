@@ -32,6 +32,8 @@ permalink: 'posts/:categories/:title'
 paginate : 5
 paginate_path: "/page/:num"
 
+  
+
 kramdown:
     syntax_highlighter_opts:
         block:
