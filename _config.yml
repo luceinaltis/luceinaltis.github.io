@@ -29,15 +29,8 @@ url: "https://luceinaltis.github.io"
 permalink: 'posts/:categories/:title'
 
 # Paginate config
-pagination:
-  enabled: true
-  per_page: 5
-  sort_reverse: true
-  title: ':title'
-  permalink: 'page/:num/'
-  trail: 
-    before: 2
-    after: 2
+paginate : 5
+paginate_path: "/page/:num"
 
 kramdown:
     syntax_highlighter_opts:
@@ -51,7 +44,7 @@ kramdown:
 theme: minima
 plugins:
   - jekyll-feed
-  - jekyll-paginate-v2
+  - jekyll-paginate
 
 # Exclude from processing.
 # The following items will not be processed, by default.

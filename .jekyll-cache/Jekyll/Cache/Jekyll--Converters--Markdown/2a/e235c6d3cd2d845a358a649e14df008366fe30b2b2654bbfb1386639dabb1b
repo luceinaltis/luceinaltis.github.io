@@ -1,0 +1,90 @@
+I"�<h2 id="알고리즘을-배워야-하는-이유">알고리즘을 배워야 하는 이유</h2>
+
+<ol>
+  <li>좋은 코드를 짤 수 있다.</li>
+  <li>빨리 짤 수 있다.</li>
+</ol>
+
+<hr />
+
+<blockquote>
+  <p>단, 배울때 고통이 큽니다.</p>
+
+  <p>힘듭니다</p>
+
+  <blockquote>
+    <p>ㄴㅇ</p>
+  </blockquote>
+</blockquote>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre><span class="cp">#include &lt;iostream&gt;
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>그러므로 열심히 합시다.</p>
+
+<p><code class="highlighter-rouge">asdsadasd</code> asd</p>
+
+<p>하이라이트</p>
+<figure class="highlight"><pre><code class="language-cpp" data-lang="cpp"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="cp">#include &lt;iostream&gt;
+</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+
+<span class="p">{</span>
+
+<span class="err">​</span>	<span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+<p>앞으로 방향성</p>
+
+<p>앞으로 방향성</p>
+
+<p>앞으로 방향성</p>
+
+<p>앞으로 방향성</p>
+
+<p>앞으로 방향성앞으로 방향성</p>
+
+<p>앞으로 방향성</p>
+
+<p>앞으로 방향성</p>
+
+<p>앞으로 방향성</p>
+
+<p>앞으로 방향성</p>
+
+<p>앞으로 방향성</p>
+
+<p>앞으로 방향성</p>
+
+<p>앞으로 방향성</p>
+
+<p>앞으로 방향성</p>
+
+:ET
