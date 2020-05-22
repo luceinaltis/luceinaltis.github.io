@@ -7,7 +7,7 @@ pagination:
 
 <div class="me">
     <div class="name"><h3>KI HWAN</h3></div>
-    <div class="comment"><h4>사소한 것부터 소중한 것까지 모두 기록하는 블로그에요.</div></h4>
+    <div class="comment"><h4>사소한 것부터 소중한 것까지 모두 기록하는 블로그에요.</h4></div></h4>
 </div>
 <hr>
 <div class="me">
