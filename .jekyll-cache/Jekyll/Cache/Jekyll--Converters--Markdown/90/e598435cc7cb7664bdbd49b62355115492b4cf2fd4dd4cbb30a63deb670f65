@@ -1,4 +1,6 @@
-I"�O<h2 id="이분법이란">이분법이란?</h2>
+I"*P<h2 id="이분법이란">이분법이란?</h2>
+
+<hr />
 
 <p>이분법이란 주어진 범위 [lo, hi]에서 어떤 함수 f(x)의 값이 0이 되는 지점을 찾아내는 기법입니다.</p>
 
@@ -14,11 +16,13 @@
 
 <h2 id="이용-방법">이용 방법</h2>
 
+<hr />
+
 <p>이분법을 사용하려면 먼저 극점을 알아야합니다.</p>
 
 <p>극점이란 그래프에서 기울기가 0이 되는 부분을 말합니다.</p>
 
-<p><img src="/home/kihwan/Desktop/myBlog/assets/img/day/2020_05_22/graph1.png" alt="graph1" style="zoom:50%;" /></p>
+<p><img src="https://user-images.githubusercontent.com/60007241/82661637-5a5f9700-9c67-11ea-8b35-983111fb70fb.png" alt="graph1" style="zoom:50%;" /></p>
 
 <p>위와 같은 그래프에서 극점은 대략 x의 값이 1.5와 2.5 정도로 생각 할 수 있습니다.</p>
 
@@ -49,7 +53,7 @@
 
 <p>위 그래프를 미분한다면 다음과 같습니다.</p>
 
-<p><img src="/home/kihwan/Desktop/myBlog/assets/img/day/2020_05_22/graph2.png" alt="graph2" style="zoom:50%;" /></p>
+<p><img src="https://user-images.githubusercontent.com/60007241/82661640-5b90c400-9c67-11ea-8ced-91ac1e10f3dc.png" alt="graph2" style="zoom:50%;" /></p>
 
 <p>여기서 f(x) 기울기가 0인 곳을 찾기 위해서는 f’(x) = 0이 되는 해를 구해야 합니다.</p>
 
@@ -59,13 +63,15 @@
 
 <p>한번 더, 미분을 한다면 다음과 같은 1차 방정식이 됩니다.</p>
 
-<p><img src="/home/kihwan/Desktop/myBlog/assets/img/day/2020_05_22/graph3.png" alt="graph3" style="zoom:50%;" /></p>
+<p><img src="https://user-images.githubusercontent.com/60007241/82661641-5c295a80-9c67-11ea-9c95-d2354fdfd770.png" alt="graph3" style="zoom:50%;" /></p>
 
 <p>여기서도 f’‘(x) = 0이 되는 지점인 x = 2가 f’(x)의 극점이 됩니다.</p>
 
 <p>그러므로 f`(x)의 극점을 구했기 때문에 이분법을 통해서 극점들을 구할 수 있게 됩니다.</p>
 
 <h2 id="문제로-이해하기">문제로 이해하기</h2>
+
+<hr />
 
 <p>이분법을 이해하기위해 예제로 알고스팟의 ROOTS로 풀어보겠습니다.</p>
 

@@ -23,8 +23,8 @@
 
 .lineno {
         text-align: center;
-        padding-left: 0.4rem;
-        padding-right: 0.4rem;
+        /* padding-left: 0.4rem; */
+        /* padding-right: 0.4rem; */
         color: var(--skin_color);
 }
 
@@ -35,7 +35,7 @@
         margin-top: 2rem;
         margin-bottom: 2rem;
         border-radius: 0.2rem;
-        box-shadow: 0px 3px 5px 1px rgba(0,20,87,0.45);
+        /* box-shadow: 0px 0px 5px 1px rgba(0,20,87,0.45); */
 }
 
 .highlight span{
@@ -54,8 +54,8 @@
         padding:0.5rem 2rem 0.5rem 2rem;
         border:0px;
         position: relative;
-        top: 0.3rem;
-        right: 7rem;
+        top: 0.5rem;
+        right: 8rem;
         width:16rem;
         z-index:0;
         box-shadow: 0px 1px 3px 0px rgba(0,20,87,0.45);
@@ -89,8 +89,7 @@
         box-shadow: 0px 6px 19px -7px rgba(3,32,59,1);
         height: 4rem;
         display: grid;
-        grid-template-columns: 3fr 3fr 1fr;
-        justify-items: center;
+        grid-template-columns: 3fr 2fr;
 }
 
 
@@ -98,13 +97,17 @@
         text-decoration: none;
         color:whitesmoke;
         font-size: 2rem;
+        padding-left: 20%;
 }
 
 
 .wrapper .menu {
-        grid-column-start: 3;
-        grid-column-end: 3;
-        align-self: flex-end;
+        grid-column-start: 2;
+        grid-column-end: 2;
+        width: 40px;
+        justify-self: right;
+        justify-items: center;
+        padding-right: 40%;
         /* margin-bottom: 0.3rem; */
 }
 
@@ -270,16 +273,30 @@ section > h2, .me .name h5 {
 .post {
         margin: 3rem auto 3rem auto;
         width: 80%;
+        font-size: 1rem;
 }
+
+.post p img { 
+        display: block;
+        max-width: 100%; 
+        height: auto; 
+        box-shadow: 0px 3px 10px 1px rgba(0,20,87,0.3);
+        margin: 1rem auto;
+}
+
+
 li {counter-increment: li;}
 
-.post ol {list-style: none; counter-reset: li}
+
+.post ol {list-style: none; counter-reset: li;}
 .post ol li::before {content: counter(li); color: var(--trend_color);
         display: inline-block; width: 1em; margin-left: -1.5em;
         margin-right: 0.5em; text-align: right; direction: rtl;
         padding:0.2rem 0.5rem 0.2rem 0rem;
         font-size: 1.4rem;
 }
+
+
 
 .post ol li {
         padding-left: 3rem;
@@ -294,17 +311,21 @@ li {counter-increment: li;}
 .post h2 {
         font-size: 2rem;
         color:black;
+        margin-top: 2rem;
 }
 
 .post blockquote {
         border-left: 3px solid var(--trend_color);
         font-size: larger;
         font-style: italic;
+        color: rgba(32, 38, 35, 0.8);
         padding-left: 1rem;
+        background-color: rgba(72, 78, 95, 0.2);
+        margin: 1rem 0;
 }
 
 .post p{
-        padding: 0.5rem;
+        padding: 0.3rem;
         line-height: 2rem;
 }
 
@@ -388,7 +409,8 @@ hr {
 article {
         margin-left: auto;
         margin-right: auto;
-        width: 60%;
+
+        width: 80%;
         font-size: 1.1rem;
 }
 
