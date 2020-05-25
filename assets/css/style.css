@@ -263,16 +263,17 @@ section > h2, .me .name h5 {
 
 /* article */
 .post code.highlighter-rouge {
-        padding: 0.1rem 0.5rem 0.1rem 0.5rem;
+        padding: 0.0rem 0.3rem 0.0rem 0.3rem;
         color: white;
         border-radius: 0.2rem;
-        background-color:var(--trend_color);
+        background-color: rgba(104, 155, 192, 0.8);
         opacity: 0.8;
 }
 
 .post {
         margin: 3rem auto 3rem auto;
         width: 80%;
+        min-width: 380px;
         font-size: 1rem;
 }
 
@@ -411,12 +412,13 @@ article {
         margin-right: auto;
 
         width: 80%;
+        min-width: 380px;
         font-size: 1.1rem;
 }
 
 /* 제목 */
 article h2 {
-        font-size: 4rem;
+        font-size: 3rem;
         text-align: center;
         padding-bottom: 1rem;
         color: var(--trend_color);

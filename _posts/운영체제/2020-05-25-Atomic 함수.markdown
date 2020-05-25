@@ -16,7 +16,7 @@ atomic 함수를 알기 위해서는 먼저 atomic의 의미를 파악해야 된
 
 atomic은 해석하면 원자성, 극소의라는 뜻이다.
 
-컴퓨터 공학에서는 이를 `다른 프로세스에서의 간섭을 받지 않고 데이터가 옳게 계산된다`라고 정도로 해석된다.
+컴퓨터 공학에서는 이를 `다른 프로세스에서의 간섭을 받지 않고 데이터가 옳게 계산된다` 정도로 해석한다.
 
 이는 특히 데이터가 공유되는 멀티 스레딩 환경에서 문제가 된다.
 
@@ -102,7 +102,7 @@ critical section의 부분은 lock으로 인해 보호되어 그 중간에 다�
 이와 같은 성능저하를 막기 위해 하드웨어적으로 atomic하게 실행되는 함수들을 제공한다.
 
 ```cpp
-atomic_function() // 이 자체가 atomic하게 실행된다.
+atomic_function() // 이 자체가 atomic하다.
 ```
 
 하드웨어적으로 atomic_function들이 하나의 instruction처럼 실행되기 때문에 lock을 얻기 위해 허비되는 시간이 없다.
@@ -121,177 +121,11 @@ atomic_function() // 이 자체가 atomic하게 실행된다.
 
 그리고, 리눅스에서는 실행하기위해 -lpthread 태그를 붙여야 한다.
 
-```cpp
-#include <iostream>
-#include <atomic>
-#include <ctime>
-#define ITER 1000000
-using namespace std;
-
-typedef struct __node_t {
-    int key;
-    struct __node_t *next;
-} node_t;
-
-typedef struct __list_t {
-    atomic<node_t*> head;
-    pthread_mutex_t lock; // mutex
-} list_t;
-
-/* -------------------------------- mutex -------------------------- */
-void List_Init_mutex(list_t *L)
-{
-    L->head = NULL;
-    pthread_mutex_init(&L->lock, NULL);
-}
-
-int List_Insert_mutex(list_t *L, const int& key)
-{
-    node_t *new_node = new node_t;
-    if(new_node == NULL)
-    {
-        perror("new");
-        pthread_mutex_unlock(&L->lock);
-        return -1;
-    }
-    new_node->key = key;
-
-    /* mutex를 이용해 데이터를 보호한 부분 */
-    pthread_mutex_lock(&L->lock);
-    new_node->next = L->head;
-    L->head = new_node;
-    pthread_mutex_unlock(&L->lock);
-    return 0;
-}
-
-void* pthread_main_mutex(void* l)
-{
-    for(int i = 0; i < ITER; i++)
-    {
-        List_Insert_mutex((list_t*)l, i+1);
-        // cout << i << " insert complete" << '\n';
-    }
-    pthread_exit(0);
-}
-/* -------------------------------- mutex -------------------------- */
-/* ------------------------------ test_and_set --------------------- */
-
-void List_Init_tas(list_t *L)
-{
-    L->head = NULL;
-}
-
-int List_Insert_tas(list_t *L, const int& key)
-{
-    node_t *new_node = new node_t;
-    if(new_node == NULL)
-    {
-        perror("new");
-        return -1;
-    }
-    
-    new_node->key = key;
-    node_t* old_head = atomic_exchange(&L->head, new_node);
-    new_node->next = old_head;
-    return 0;
-}
-
-void* pthread_main_tas(void* l)
-{
-    for(int i = 0; i < ITER; i++)
-    {
-        List_Insert_tas((list_t*)l, i+1);
-        // cout << i << " insert complete" << '\n';
-    }
-    pthread_exit(0);
-}
-
-/* ------------------------------ test_and_set --------------------- */
-
-
-int main()
-{
-    clock_t start, end;
-    int i, ret[10];
-    pthread_t t[10];
-    clock_t mutex, tas;
-    list_t* l_mutex = new list_t;
-    list_t* l_tas = new list_t;
-
-    cout << "thread의 개수 : 10\n";
-    cout << "thread 당 삽입하는 노드의 개수 : " << ITER << '\n';
-
-/* -------------------------------- mutex -------------------------- */
-
-    cout << "test mutex start\n"; 
-
-    start = clock();
-    List_Init_mutex(l_mutex);
-    for(i = 0; i < 10; i++)
-    {
-        if(pthread_create(&t[i], NULL, pthread_main_mutex, (void*)l_mutex) != 0)
-        {
-            cout << t[i] << " create error\n";
-            return -1;
-        }
-    }
-
-    for(i = 0; i < 10; i++)
-    {
-        if(pthread_join(t[i], (void**)&ret[i]) != 0)
-        {
-            cout << t[i] << " join error\n";
-            return -1;
-        }
-    }
-    end = clock();
-
-    mutex = (double)(end - start);
-    cout << "test mutex end\n"; 
-    
-/* -------------------------------- mutex -------------------------- */
-/* ------------------------------ test_and_set --------------------- */
-
-    cout << "test tas start\n";
-
-    start = clock();
-    List_Init_tas(l_tas);
-
-    for(i = 0; i < 10; i++)
-    {
-        if(pthread_create(&t[i], NULL, pthread_main_tas, (void*)l_tas) != 0)
-        {
-            cout << t[i] << " create error\n";
-            return -1;
-        }
-    }
-
-    for(i = 0; i < 10; i++)
-    {
-        if(pthread_join(t[i], (void**)&ret[i]) != 0)
-        {
-            cout << t[i] << " join error\n";
-            return -1;
-        }
-    }
-    end = clock();
-
-    tas = (double)(end - start);
-
-    cout << "test tas end\n";
-
-/* ------------------------------ test_and_set --------------------- */
-
-    cout << "mutex의 실행 시간 : " << (double)mutex/CLOCKS_PER_SEC << "s\n";
-    cout << "tas의 실행 시간 : " << (double)tas/CLOCKS_PER_SEC << "s\n";
-
-    return 0;
-}
-```
+비교를 위한 코드는 [링크](https://github.com/luceinaltis/luceinaltis/blob/master/%EC%9A%B4%EC%98%81%EC%B2%B4%EC%A0%9C/test_and_set.cpp)를 참조하자.
 
 위의 코드는 링크드 리스트의 삽입을 예제로 구현해 놓은 것이다.
 
-실제 실행 시간도 mutex방식과 atomic함수 방식에 차이가 있는 것을 확인 할 수 있다.
+실제 실행해보면 삽입을 마치는 시간도 mutex방식과 atomic함수 방식에 차이가 있는 것을 확인 할 수 있다.
 
 <img src="https://user-images.githubusercontent.com/60007241/82789303-05a95f80-9ea5-11ea-8f23-989d6d5633d9.png" alt="result1" style="zoom:100%;" />
 
