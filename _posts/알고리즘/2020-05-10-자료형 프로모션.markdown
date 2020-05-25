@@ -1,7 +1,7 @@
 ---
 layout: page
 title:  "자료형 프로모션"
-categories: algorithm
+categories: 알고리즘
 ---
 ## 자료형 프로모션이란?
 ---

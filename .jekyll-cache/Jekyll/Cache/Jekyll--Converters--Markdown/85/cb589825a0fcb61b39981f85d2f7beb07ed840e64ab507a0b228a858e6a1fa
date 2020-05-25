@@ -1,0 +1,461 @@
+I"�p<p>이 글은 개인적으로 공부한 부분을 정리해놓은 글 입니다.</p>
+
+<p>부정확한 정보가 있을 수 있으니 이에 유의하여 글을 읽어주시기 바랍니다 :)</p>
+
+<h2 id="atomic-함수란">Atomic 함수란?</h2>
+
+<hr />
+
+<p>atomic 함수를 알기 위해서는 먼저 atomic의 의미를 파악해야 된다.</p>
+
+<p>atomic은 해석하면 원자성, 극소의라는 뜻이다.</p>
+
+<p>컴퓨터 공학에서는 이를 <code class="highlighter-rouge">다른 프로세스에서의 간섭을 받지 않고 데이터가 옳게 계산된다</code>라고 정도로 해석된다.</p>
+
+<p>이는 특히 데이터가 공유되는 멀티 스레딩 환경에서 문제가 된다.</p>
+
+<p>멀티 스레딩 환경에서는 스레드는 스택의 메모리만 따로 관리하고 그 외 다른 메모리는 공유한다.</p>
+
+<p>그러므로, 만약 같은 메모리 주소를 참조하고 읽고 쓰는 과정을 반복하는 스레드가 여러 개 있고 동시에 실행된다면 문제가 된다.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="cp"># MIPS assembly
+</span><span class="n">lw</span> <span class="err">$</span><span class="mi">1</span> <span class="p">(</span><span class="err">$</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">add</span> <span class="err">$</span><span class="mi">1</span> <span class="err">$</span><span class="mi">1</span> <span class="mi">1</span>
+<span class="n">sw</span> <span class="err">$</span><span class="mi">1</span> <span class="p">(</span><span class="err">$</span><span class="mi">2</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>위와 같은 어셈블리 코드를 보면서 이해해보자.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="n">lw</span> <span class="err">$</span><span class="mi">1</span> <span class="p">(</span><span class="err">$</span><span class="mi">2</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>첫째 줄에서  $2 레지스터가 가르키는 메모리 주소를 참조하여 $1 레지스터에 저장한다.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="n">add</span> <span class="err">$</span><span class="mi">1</span> <span class="err">$</span><span class="mi">1</span> <span class="mi">1</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>둘째 줄에서는 $1 레지스터 값을 1만큼 올려준다.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="n">sw</span> <span class="err">$</span><span class="mi">1</span> <span class="p">(</span><span class="err">$</span><span class="mi">2</span><span class="p">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>마지막 줄에서는 $1 레지스터 값을 ($2)가 가르키는 메모리 주소에 저장한다.</p>
+
+<p>이와 같은 코드를 여러번 실행시키는 스레드 2개를 가정하자.</p>
+
+<p>참고로, 각 스레드의 레지스터는 동일한 레지스터가 아니다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/60007241/82789309-06da8c80-9ea5-11ea-90a8-58af4efb7729.png" alt="table1" style="zoom:80%;" /></p>
+
+<p>다음과 같은 실행 흐름은 atomic이 깨진 상황이다.</p>
+
+<p>실제 엔지니어가 의도한 것은 각각의 스레드에서 1을 더하여 저장된 메모리의 결과 값이 +2가 되는 것이다.</p>
+
+<p>하지만, 실제로 ($2)에 저장된 값을 보면 +1만 된 것을 볼 수 있다.</p>
+
+<p>이는 메모리의 값을 레지스터로 읽어오는 과정과 실제 +1이 이뤄지는 그 중간사이에 또 다른 스레드의 명령어가 실행되서 발생하는 문제이다.</p>
+
+<p>이를 데이터 레이싱 현상이라고도 부른다.</p>
+
+<p>이런 문제를 방지하기위해 함수 실행을 하드웨어의 적절한 지원으로 하나의 명령어처럼 실행되는 함수를 atomic 함수라고 부른다.</p>
+
+<h2 id="atomic-방식과-mutex-lock방식의-차이">Atomic 방식과 mutex lock방식의 차이</h2>
+
+<hr />
+
+<p>atomic을 보장하기 위해서는 엔지니어가 사용할 수 있는 수많은 방법이 있지만 이 글에서는 atomic 함수와 mutex 방식만을 비교 하였다.</p>
+
+<p>먼저, mutex lock을 사용하는 방법을 보자.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="n">pthread_mutex_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lock</span><span class="p">);</span>
+<span class="cm">/* - critical section - */</span>
+<span class="cm">/* - any function - */</span>
+<span class="cm">/* - critical section - */</span>
+<span class="n">pthread_mutex_unlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lock</span><span class="p">);</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>pthread에서는 이런 atomic을 보장하기 위한 방법으로 lock을 얻고 포기하는 방법을 제공한다.</p>
+
+<p>mutex 방식의 lock을 이용하면 같은 lock을 잡기 위해 다양한 스레드가 lock 요청을 한다.</p>
+
+<p>잡는데 성공한 스레드는 그대로 cirical section으로 진입하여 코드를 실행한다.</p>
+
+<p>lock을 잡지 못한 스레드는 lock을 잡은 스레드가 lock을 놓을 때까지 대기한다.</p>
+
+<p>critical section의 부분은 lock으로 인해 보호되어 그 중간에 다른 스레드가 실행되지 않는 것을 보장해준다.</p>
+
+<p>이를 보장함으로서 critical section의 atomic또한 보장되는 것이다.</p>
+
+<p>하지만, lock을 얻는데 실패한 스레드가 다른 스레드가 lock을 놓기를 마냥 기다리기 때문에 이에 허비되는 시간은 성능저하로 이어진다.</p>
+
+<p>이와 같은 성능저하를 막기 위해 하드웨어적으로 atomic하게 실행되는 함수들을 제공한다.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="n">atomic_function</span><span class="p">()</span> <span class="c1">// 이 자체가 atomic하게 실행된다.</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>하드웨어적으로 atomic_function들이 하나의 instruction처럼 실행되기 때문에 lock을 얻기 위해 허비되는 시간이 없다.</p>
+
+<p>또한, 코드 또한 간결해지는 장점이 있다.</p>
+
+<p>이 같이 지원되는 atomic_function을 보려면 <a href="https://gcc.gnu.org/onlinedocs/gcc/_005f_005fatomic-Builtins.html">링크</a>를 참조하자.</p>
+
+<h2 id="실제-코드-응용">실제 코드 응용</h2>
+
+<hr />
+
+<p>다양한 atomic 함수가 있지만 코드에는 c++11에서 지원하는 atomic 클래스의 atomic_exchange를 이용하였다.</p>
+
+<p>그리고, 리눅스에서는 실행하기위해 -lpthread 태그를 붙여야 한다.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+</pre></td><td class="rouge-code"><pre><span class="cp">#include &lt;iostream&gt;
+#include &lt;atomic&gt;
+#include &lt;ctime&gt;
+#define ITER 1000000
+</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">__node_t</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">key</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">__node_t</span> <span class="o">*</span><span class="n">next</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">node_t</span><span class="p">;</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">__list_t</span> <span class="p">{</span>
+    <span class="n">atomic</span><span class="o">&lt;</span><span class="n">node_t</span><span class="o">*&gt;</span> <span class="n">head</span><span class="p">;</span>
+    <span class="n">pthread_mutex_t</span> <span class="n">lock</span><span class="p">;</span> <span class="c1">// mutex</span>
+<span class="p">}</span> <span class="n">list_t</span><span class="p">;</span>
+
+<span class="cm">/* -------------------------------- mutex -------------------------- */</span>
+<span class="kt">void</span> <span class="nf">List_Init_mutex</span><span class="p">(</span><span class="n">list_t</span> <span class="o">*</span><span class="n">L</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">L</span><span class="o">-&gt;</span><span class="n">head</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">pthread_mutex_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">L</span><span class="o">-&gt;</span><span class="n">lock</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">List_Insert_mutex</span><span class="p">(</span><span class="n">list_t</span> <span class="o">*</span><span class="n">L</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">key</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">node_t</span> <span class="o">*</span><span class="n">new_node</span> <span class="o">=</span> <span class="k">new</span> <span class="n">node_t</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">new_node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">perror</span><span class="p">(</span><span class="s">"new"</span><span class="p">);</span>
+        <span class="n">pthread_mutex_unlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">L</span><span class="o">-&gt;</span><span class="n">lock</span><span class="p">);</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">new_node</span><span class="o">-&gt;</span><span class="n">key</span> <span class="o">=</span> <span class="n">key</span><span class="p">;</span>
+
+    <span class="cm">/* mutex를 이용해 데이터를 보호한 부분 */</span>
+    <span class="n">pthread_mutex_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">L</span><span class="o">-&gt;</span><span class="n">lock</span><span class="p">);</span>
+    <span class="n">new_node</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">L</span><span class="o">-&gt;</span><span class="n">head</span><span class="p">;</span>
+    <span class="n">L</span><span class="o">-&gt;</span><span class="n">head</span> <span class="o">=</span> <span class="n">new_node</span><span class="p">;</span>
+    <span class="n">pthread_mutex_unlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">L</span><span class="o">-&gt;</span><span class="n">lock</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="o">*</span> <span class="nf">pthread_main_mutex</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">l</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">ITER</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">List_Insert_mutex</span><span class="p">((</span><span class="n">list_t</span><span class="o">*</span><span class="p">)</span><span class="n">l</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+        <span class="c1">// cout &lt;&lt; i &lt;&lt; " insert complete" &lt;&lt; '\n';</span>
+    <span class="p">}</span>
+    <span class="n">pthread_exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="cm">/* -------------------------------- mutex -------------------------- */</span>
+<span class="cm">/* ------------------------------ test_and_set --------------------- */</span>
+
+<span class="kt">void</span> <span class="nf">List_Init_tas</span><span class="p">(</span><span class="n">list_t</span> <span class="o">*</span><span class="n">L</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">L</span><span class="o">-&gt;</span><span class="n">head</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">List_Insert_tas</span><span class="p">(</span><span class="n">list_t</span> <span class="o">*</span><span class="n">L</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">key</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">node_t</span> <span class="o">*</span><span class="n">new_node</span> <span class="o">=</span> <span class="k">new</span> <span class="n">node_t</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">new_node</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">perror</span><span class="p">(</span><span class="s">"new"</span><span class="p">);</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    
+    <span class="n">new_node</span><span class="o">-&gt;</span><span class="n">key</span> <span class="o">=</span> <span class="n">key</span><span class="p">;</span>
+    <span class="n">node_t</span><span class="o">*</span> <span class="n">old_head</span> <span class="o">=</span> <span class="n">atomic_exchange</span><span class="p">(</span><span class="o">&amp;</span><span class="n">L</span><span class="o">-&gt;</span><span class="n">head</span><span class="p">,</span> <span class="n">new_node</span><span class="p">);</span>
+    <span class="n">new_node</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">old_head</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="o">*</span> <span class="nf">pthread_main_tas</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">l</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">ITER</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">List_Insert_tas</span><span class="p">((</span><span class="n">list_t</span><span class="o">*</span><span class="p">)</span><span class="n">l</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+        <span class="c1">// cout &lt;&lt; i &lt;&lt; " insert complete" &lt;&lt; '\n';</span>
+    <span class="p">}</span>
+    <span class="n">pthread_exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/* ------------------------------ test_and_set --------------------- */</span>
+
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">clock_t</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">ret</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
+    <span class="n">pthread_t</span> <span class="n">t</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
+    <span class="kt">clock_t</span> <span class="n">mutex</span><span class="p">,</span> <span class="n">tas</span><span class="p">;</span>
+    <span class="n">list_t</span><span class="o">*</span> <span class="n">l_mutex</span> <span class="o">=</span> <span class="k">new</span> <span class="n">list_t</span><span class="p">;</span>
+    <span class="n">list_t</span><span class="o">*</span> <span class="n">l_tas</span> <span class="o">=</span> <span class="k">new</span> <span class="n">list_t</span><span class="p">;</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"thread의 개수 : 10</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"thread 당 삽입하는 노드의 개수 : "</span> <span class="o">&lt;&lt;</span> <span class="n">ITER</span> <span class="o">&lt;&lt;</span> <span class="sc">'\n'</span><span class="p">;</span>
+
+<span class="cm">/* -------------------------------- mutex -------------------------- */</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"test mutex start</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span> 
+
+    <span class="n">start</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+    <span class="n">List_Init_mutex</span><span class="p">(</span><span class="n">l_mutex</span><span class="p">);</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">pthread_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">pthread_main_mutex</span><span class="p">,</span> <span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="n">l_mutex</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">" create error</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">pthread_join</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="p">(</span><span class="kt">void</span><span class="o">**</span><span class="p">)</span><span class="o">&amp;</span><span class="n">ret</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">" join error</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+
+    <span class="n">mutex</span> <span class="o">=</span> <span class="p">(</span><span class="kt">double</span><span class="p">)(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"test mutex end</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span> 
+    
+<span class="cm">/* -------------------------------- mutex -------------------------- */</span>
+<span class="cm">/* ------------------------------ test_and_set --------------------- */</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"test tas start</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+
+    <span class="n">start</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+    <span class="n">List_Init_tas</span><span class="p">(</span><span class="n">l_tas</span><span class="p">);</span>
+
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">pthread_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">pthread_main_tas</span><span class="p">,</span> <span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="n">l_tas</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">" create error</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">pthread_join</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="p">(</span><span class="kt">void</span><span class="o">**</span><span class="p">)</span><span class="o">&amp;</span><span class="n">ret</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">" join error</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+
+    <span class="n">tas</span> <span class="o">=</span> <span class="p">(</span><span class="kt">double</span><span class="p">)(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">);</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"test tas end</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+
+<span class="cm">/* ------------------------------ test_and_set --------------------- */</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"mutex의 실행 시간 : "</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">mutex</span><span class="o">/</span><span class="n">CLOCKS_PER_SEC</span> <span class="o">&lt;&lt;</span> <span class="s">"s</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"tas의 실행 시간 : "</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">tas</span><span class="o">/</span><span class="n">CLOCKS_PER_SEC</span> <span class="o">&lt;&lt;</span> <span class="s">"s</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>위의 코드는 링크드 리스트의 삽입을 예제로 구현해 놓은 것이다.</p>
+
+<p>실제 실행 시간도 mutex방식과 atomic함수 방식에 차이가 있는 것을 확인 할 수 있다.</p>
+
+<p><img src="https://user-images.githubusercontent.com/60007241/82789303-05a95f80-9ea5-11ea-8f23-989d6d5633d9.png" alt="result1" style="zoom:100%;" /></p>
+
+:ET

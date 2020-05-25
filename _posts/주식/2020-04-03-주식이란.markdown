@@ -2,6 +2,6 @@
 layout: page
 title:  "주식이란"
 date:   2020-04-04
-categories: [stock]
+categories: [주식]
 ---
 `ㅁㄴㅇ`안녕하세요
