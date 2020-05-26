@@ -1,11 +1,11 @@
 
 function toggleMenu() {
     var x = document.getElementById("hide-menu");
-    if( x.style.visibility === "hidden") {
-        x.style.visibility = "visible";
+    if( x.style.display === "none") {
+        x.style.display = "block";
     } else
     {
-        x.style.visibility = "hidden";
+        x.style.display = "none";
     }
 }
 
@@ -16,7 +16,7 @@ window.onscroll = function() {
     document.getElementById("navbar").style.top = "0";
   } else {
     document.getElementById("navbar").style.top = "-5rem";
-    document.getElementById("hide-menu").style.visibility = "hidden";
+    document.getElementById("hide-menu").style.display = "none";
 }
   prevScrollpos = currentScrollPos;
 }
