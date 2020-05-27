@@ -39,6 +39,8 @@ kramdown:
         block:
             line_numbers: true
 
+disqus_shortname: 'http-luceinaltis-github-io'
+
 
 
 
