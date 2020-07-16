@@ -1,5 +1,5 @@
 ---
 layout: category
-title: 개발일지
+title: 트위치API
 ---
 
