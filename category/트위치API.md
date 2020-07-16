@@ -1,5 +1,5 @@
 ---
 layout: category
-title: 주식
+title: 개발일지
 ---
 
