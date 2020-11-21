@@ -25,20 +25,16 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
       - name: build
         run: next build
-      # Runs a set of commands using the runners shell
+        
       - name: export
-        run: &&
-          next export
+        run: next export
       
       - name: touch
-        run: &&
-          touch out/.nojekyll
+        run: touch out/.nojekyll
           
       - name: deploy
-        run: &&
-          git add out/ && git commit -m 'deploy to gh-pages' && git subtree push --prefix out origin gh-page
+        run: git add out/ && git commit -m 'deploy to gh-pages' && git subtree push --prefix out origin gh-page
 
         
