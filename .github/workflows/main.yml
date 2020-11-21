@@ -34,8 +34,11 @@ jobs:
         run: npm install
       
       - name: Git setting
-        run: git config --global user.email "you@example.com" &
-             git config --global user.name "Your Name"
+        run: git config --global user.email "luceinaltis2020@naver.com" &
+             git config --global user.name "Kim Ki Hwan"
+             
+      - name: Git pull
+        run: git pull
 
       - name: build
         run: npm run deploy
