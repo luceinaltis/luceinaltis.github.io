@@ -26,15 +26,6 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: build
-        run: next build
-        
-      - name: export
-        run: next export
-      
-      - name: touch
-        run: touch out/.nojekyll
-          
-      - name: deploy
-        run: git add out/ && git commit -m 'deploy to gh-pages' && git subtree push --prefix out origin gh-page
+        run: npm run deploy
 
         
