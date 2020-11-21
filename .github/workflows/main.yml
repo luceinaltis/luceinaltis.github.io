@@ -38,9 +38,11 @@ jobs:
              git config --global user.email "luceinaltis2020@naver.com"
              git config --global user.name "Kim Ki Hwan"
              
-      - name: Git pull
-        run: git pull
-
+             git add .
+             git commit -m "deploy"
+             git push
+             git pull
+             
       - name: build
         run: npm run deploy
 
