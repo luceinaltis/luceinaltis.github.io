@@ -13,6 +13,7 @@ const HomeTemplate = ({
 }) => {
   return (
     <div>
+      <div>이미지</div>
       <div>
         <h1>{title}</h1>
         <article dangerouslySetInnerHTML={{ __html: content }} />
