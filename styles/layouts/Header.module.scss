@@ -1,0 +1,29 @@
+.header_fixed {
+    display: flex;
+    position: fixed;
+    height: 4rem;
+    width: 100%;
+    align-items: center;
+    background-color: white;
+    transition: margin-top 0.02s linear, box-shadow 0.3s ease-in-out;
+    
+    div {
+        margin-left: 2rem;
+        margin-right: 2rem;
+    }
+}
+
+.header {
+    display: flex;
+    height: 4rem;
+    width: 100%;
+    align-items: center;
+    background-color: white;
+    // background-color: rgb(173, 142, 119);
+    transition: margin-top 0.02s linear;
+    
+    div {
+        margin-left: 2rem;
+        margin-right: 2rem;
+    }
+}
