@@ -6,51 +6,55 @@ import styles from '../../styles/layouts/Header.module.scss'
 const Header: NextComponentType = () => {
   const scrollY = useRef(0)
   const prevScrollY = useRef(0)
-  const headerRef = useRef(null)
+  const headerRef = useRef<HTMLHeadingElement>(null)
   const [headerMarginTop, setheaderMarginTop] = useState(0)
   const throttle = useRef(false)
 
   useEffect(() => {
     const scrollListener = (): void => {
-      scrollY.current = window.pageYOffset
+      if (null != headerRef.current) {
+        scrollY.current = window.pageYOffset
 
-      if (scrollY.current < 10) {
-        setheaderMarginTop(0)
-      }
-
-      if (scrollY.current < 5) {
-        headerRef.current.style.boxShadow = 'none'
-      } else {
-        headerRef.current.style.boxShadow = 'rgba(0, 0, 0, 0.08) 0px 0px 8px'
-      }
-
-      const height = headerRef.current.getBoundingClientRect().height
-
-      if (prevScrollY.current < scrollY.current && headerMarginTop <= 0) {
-        // 아래 스크롤
-        setheaderMarginTop(headerMarginTop - (scrollY.current - prevScrollY.current))
-      } else if (headerMarginTop < -height) {
-        // 위 스크롤(아예 안보일 때)
-        setheaderMarginTop(-height)
-      } else if (headerMarginTop < 0) {
-        // 위 스크롤(조금 보일 때)
-        let nextHeaderMarginTop = headerMarginTop + (-scrollY.current + prevScrollY.current)
-        if (nextHeaderMarginTop > 0) {
-          nextHeaderMarginTop = 0
+        if (scrollY.current < 10) {
+          setheaderMarginTop(0)
         }
-        setheaderMarginTop(nextHeaderMarginTop)
-      }
 
-      if (
-        prevScrollY.current < scrollY.current &&
-        window.innerHeight + scrollY.current >= document.documentElement.scrollHeight - height / 2
-      ) {
-        setheaderMarginTop(-height)
-        headerRef.current.style.marginTop = `-${height}px`
-      }
+        if (scrollY.current < 5) {
+          headerRef.current.style.boxShadow = 'none'
+        } else {
+          headerRef.current.style.boxShadow = 'rgba(0, 0, 0, 0.08) 0px 0px 8px'
+        }
 
-      headerRef.current.style.marginTop = `${headerMarginTop}px`
-      prevScrollY.current = scrollY.current
+        const height = headerRef.current.getBoundingClientRect().height
+
+        if (prevScrollY.current < scrollY.current && headerMarginTop <= 0) {
+          // 아래 스크롤
+          setheaderMarginTop(headerMarginTop - (scrollY.current - prevScrollY.current))
+        } else if (headerMarginTop < -height) {
+          // 위 스크롤(아예 안보일 때)
+          setheaderMarginTop(-height)
+        } else if (headerMarginTop < 0) {
+          // 위 스크롤(조금 보일 때)
+          let nextHeaderMarginTop = headerMarginTop + (-scrollY.current + prevScrollY.current)
+          if (nextHeaderMarginTop > 0) {
+            nextHeaderMarginTop = 0
+          }
+          setheaderMarginTop(nextHeaderMarginTop)
+        }
+
+        if (
+          prevScrollY.current < scrollY.current &&
+          window.innerHeight + scrollY.current >= document.documentElement.scrollHeight - height / 2
+        ) {
+          setheaderMarginTop(-height)
+          if (headerRef && headerRef.current) {
+            headerRef.current.style.marginTop = `-${height}px`
+          }
+        }
+
+        headerRef.current.style.marginTop = `${headerMarginTop}px`
+        prevScrollY.current = scrollY.current
+      }
     }
 
     const throttledListener = (): void => {
