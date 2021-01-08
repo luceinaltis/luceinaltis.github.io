@@ -21,6 +21,7 @@ const Header: NextComponentType = () => {
 
         if (scrollY.current < 5) {
           headerRef.current.style.boxShadow = 'none'
+          headerRef.current.style.background = 'rgb(248, 249, 250)'
         } else {
           headerRef.current.style.boxShadow = 'rgba(0, 0, 0, 0.08) 0px 0px 8px'
         }
@@ -76,7 +77,9 @@ const Header: NextComponentType = () => {
   return (
     <>
       <header className={styles.header_fixed} ref={headerRef}>
-        <div>luce.log</div>
+        <div className="home__container">
+          <div>luce.log</div>
+        </div>
       </header>
       <header className={styles.header} />
     </>

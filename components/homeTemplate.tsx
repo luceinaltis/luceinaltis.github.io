@@ -1,25 +1,27 @@
 import Date from '../components/date'
 
+import styles from '../styles/modules/components/homeTemplate.module.scss'
+
 const HomeTemplate = ({
   title,
-  id,
   content,
   date,
 }: {
   title: string
-  id: string
   content: string
   date: string
-}) => {
+}): JSX.Element => {
   return (
-    <div>
-      <div>이미지</div>
-      <div>
-        <h1>{title}</h1>
-        <article dangerouslySetInnerHTML={{ __html: content }} />
-      </div>
-      <div>
-        <Date dateString={date} />
+    <div className={styles.post__wrapper}>
+      <div className={styles.post__thumbnail}>이미지</div>
+      <div className={styles.post__info}>
+        <div className={styles.title}>{title}</div>
+        <div className={styles.description}>
+          <p>{content}</p>
+          <div className={styles.date}>
+            <Date dateString={date} />
+          </div>
+        </div>
       </div>
     </div>
   )

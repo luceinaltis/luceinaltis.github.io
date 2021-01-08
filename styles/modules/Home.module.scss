@@ -1,0 +1,14 @@
+
+.wrapper {
+    margin-top: 2rem;
+}
+
+.posts__wrapper {
+    margin: -1rem;
+    display: flex;
+    flex-wrap: wrap;
+    word-break: keep-all;
+    text-overflow: ellipsis;
+    margin-bottom: 1000rem;
+}
+

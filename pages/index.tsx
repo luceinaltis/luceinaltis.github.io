@@ -5,7 +5,7 @@ import { GetStaticProps } from 'next'
 
 import { getSortedPostsData } from '../lib/posts'
 import HomeTemplate from '../components/homeTemplate'
-import styles from '../styles/Home.module.css'
+import styles from '../styles/modules/Home.module.scss'
 
 const Home = ({
   allPostsData,
@@ -13,22 +13,25 @@ const Home = ({
   allPostsData: {
     date: string
     title: string
+    content: string
     id: string
   }[]
 }): JSX.Element => {
   return (
-    <div>
+    <>
       <Head>
         <title>마이 프레셔스</title>
       </Head>
-      <main>
-        <section>
-          {allPostsData.map((value, idx: number) => {
-            return <HomeTemplate key={idx} {...value} />
-          })}
-        </section>
+      <main className="home__container">
+        <div className={styles.wrapper}>
+          <div className={styles.posts__wrapper}>
+            {allPostsData.map((value, idx: number) => {
+              return <HomeTemplate key={idx} {...value} />
+            })}
+          </div>
+        </div>
       </main>
-    </div>
+    </>
   )
 }
 

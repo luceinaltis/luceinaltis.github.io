@@ -8,6 +8,7 @@ type Props = {
     title: string
     id: string
     date: string
+    content: string
     contentHtml: string
   }
 }
