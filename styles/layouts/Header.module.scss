@@ -4,9 +4,9 @@
     height: 4rem;
     width: 100%;
     align-items: center;
-    transition: margin-top 0.02s linear, box-shadow 0.3s ease-in-out;
+    transition: margin-top 0.02s linear, box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out;
     background: white;
-    
+    z-index: 1;
 }
 
 .header {

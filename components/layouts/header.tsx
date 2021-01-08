@@ -1,5 +1,6 @@
 import { NextComponentType } from 'next'
 import { useEffect, useRef, useState } from 'react'
+import { useRouter } from 'next/router'
 
 import styles from '../../styles/layouts/Header.module.scss'
 
@@ -10,7 +11,13 @@ const Header: NextComponentType = () => {
   const [headerMarginTop, setheaderMarginTop] = useState(0)
   const throttle = useRef(false)
 
+  const router = useRouter()
+
   useEffect(() => {
+    if (null != headerRef.current && router.pathname === '/') {
+      headerRef.current.style.background = 'rgb(248, 249, 250)'
+    }
+
     const scrollListener = (): void => {
       if (null != headerRef.current) {
         scrollY.current = window.pageYOffset
@@ -21,9 +28,12 @@ const Header: NextComponentType = () => {
 
         if (scrollY.current < 5) {
           headerRef.current.style.boxShadow = 'none'
-          headerRef.current.style.background = 'rgb(248, 249, 250)'
+          if (router.pathname === '/') {
+            headerRef.current.style.background = 'rgb(248, 249, 250)'
+          }
         } else {
           headerRef.current.style.boxShadow = 'rgba(0, 0, 0, 0.08) 0px 0px 8px'
+          headerRef.current.style.background = '#ffffff'
         }
 
         const height = headerRef.current.getBoundingClientRect().height
@@ -77,8 +87,12 @@ const Header: NextComponentType = () => {
   return (
     <>
       <header className={styles.header_fixed} ref={headerRef}>
-        <div className="home__container">
-          <div>luce.log</div>
+        <div className={`home__container`}>
+          <div>
+            <a href="/">
+              <span>luce.log</span>
+            </a>
+          </div>
         </div>
       </header>
       <header className={styles.header} />

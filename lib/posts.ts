@@ -5,6 +5,7 @@ import remark from 'remark'
 import html from 'remark-html'
 
 const postsDirectory = path.join(process.cwd(), 'posts')
+// const STATIC_URL = 'https://static.luce.today/'
 
 export function getSortedPostsData() {
   const fileNames = fs.readdirSync(postsDirectory)
@@ -16,13 +17,18 @@ export function getSortedPostsData() {
     const fileContents = fs.readFileSync(fullPath, 'utf8')
 
     const matterResult = matter(fileContents)
-
     const content = matterResult.content
 
     return {
       id,
       content,
-      ...(matterResult.data as { date: string; title: string }),
+      ...(matterResult.data as {
+        date: string
+        title: string
+        thumbnail: string
+        description: string
+        tags: string[]
+      }),
     }
   })
 
@@ -68,11 +74,18 @@ export async function getPostData(id: string): Promise<PostData> {
 
   // Use remark to convert markdown into HTML string
   const processedContent = await remark().use(html).process(matterResult.content)
+
   const contentHtml = processedContent.toString()
 
   return {
     id,
     contentHtml,
-    ...(matterResult.data as { date: string; title: string }),
+    ...(matterResult.data as {
+      date: string
+      title: string
+      tags: string[]
+      description: string
+      thumbnail: string
+    }),
   }
 }

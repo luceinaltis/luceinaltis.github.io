@@ -9,10 +9,13 @@
     "deploy": "rm -rf node_modules/.cache && next build && next export && touch out/.nojekyll && git add out/ && git commit -m \"Deploy Next.js to gh-pages\" && git subtree push --prefix out origin gh-pages"
   },
   "dependencies": {
+    "@types/unist": "^2.0.3",
     "next": "10.0.2",
     "react": "17.0.1",
     "react-dom": "17.0.1",
-    "sass": "^1.30.0"
+    "rehype-stringify": "^8.0.0",
+    "sass": "^1.30.0",
+    "unist-util-visit": "^2.0.3"
   },
   "devDependencies": {
     "@types/next": "^9.0.0",
