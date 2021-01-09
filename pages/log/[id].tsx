@@ -5,6 +5,7 @@ import { parseISO, format } from 'date-fns'
 import { getAllPostIds, getPostData } from '../../lib/posts'
 
 import styles from '../../styles/modules/Log.module.scss'
+import { url } from 'inspector'
 
 type Props = {
   postData: {
@@ -24,6 +25,7 @@ const Post: NextPage<Props> = ({ postData }) => {
     <>
       <Head>
         <title>{postData.title} - luce.log</title>
+        <link rel="stylesheet" href="/static/prism.css" />
       </Head>
       <section className="log__container">
         <div className={styles.head__wrapper}>
@@ -44,6 +46,7 @@ const Post: NextPage<Props> = ({ postData }) => {
         </div>
         <article dangerouslySetInnerHTML={{ __html: postData.contentHtml }}></article>
       </section>
+      <script src="/static/prism.js"></script>
     </>
   )
 }
