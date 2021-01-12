@@ -1,6 +1,7 @@
 import { NextComponentType } from 'next'
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 import styles from '../../styles/layouts/Header.module.scss'
 
@@ -14,6 +15,16 @@ const Header: NextComponentType = () => {
   const router = useRouter()
 
   useEffect(() => {
+    if (headerRef.current != null) {
+      headerRef.current.style.marginTop = '0px'
+    }
+
+    if (null != headerRef.current && router.pathname === '/') {
+      headerRef.current.style.background = 'rgba(248, 249, 250, 0.651)'
+    }
+  }, [router.pathname])
+
+  useEffect(() => {
     if (null != headerRef.current && router.pathname === '/') {
       headerRef.current.style.background = 'rgb(248, 249, 250)'
     }
@@ -22,11 +33,11 @@ const Header: NextComponentType = () => {
       if (null != headerRef.current) {
         scrollY.current = window.pageYOffset
 
-        if (scrollY.current < 10) {
+        if (scrollY.current < 30) {
           setheaderMarginTop(0)
         }
 
-        if (scrollY.current < 5) {
+        if (scrollY.current < 10) {
           headerRef.current.style.boxShadow = 'none'
           if (router.pathname === '/') {
             headerRef.current.style.background = 'rgb(248, 249, 250)'
@@ -88,10 +99,53 @@ const Header: NextComponentType = () => {
     <>
       <header className={styles.header_fixed} ref={headerRef}>
         <div className={`home__container`}>
+          <div className={styles.logo__wrapper}>
+            <Link href="/">
+              <a>
+                <div className={styles.logo}>luce.log</div>
+              </a>
+            </Link>
+          </div>
           <div>
-            <a href="/">
-              <span>luce.log</span>
-            </a>
+            <div className={styles.categories__wrapper}>
+              <Link href="/">
+                <a className={router.pathname === '/' ? styles.active : styles.inactive}>기록</a>
+              </Link>
+              <Link href="/tags">
+                <a className={router.pathname === '/tags' ? styles.active : styles.inactive}>
+                  태그 목록
+                </a>
+              </Link>
+              <Link href="/about">
+                <a className={router.pathname === '/about' ? styles.active : styles.inactive}>
+                  소개
+                </a>
+              </Link>
+              <span
+                className={styles.desktop}
+                style={
+                  router.pathname === '/'
+                    ? { left: `calc(2.25rem)`, width: '2.5rem' }
+                    : router.pathname === '/tags'
+                    ? { left: 'calc(7rem + 1rem)', width: '5rem' }
+                    : router.pathname === '/about'
+                    ? { left: 'calc(14rem + 2.25rem)', width: '2.5rem' }
+                    : { left: '-100%' }
+                }
+              />
+              <span
+                className={styles.mobile}
+                style={
+                  router.pathname === '/'
+                    ? { left: `calc(1.5rem)`, width: '2rem' }
+                    : router.pathname === '/tags'
+                    ? { left: 'calc(5rem + .5rem)', width: '4rem' }
+                    : router.pathname === '/about'
+                    ? { left: 'calc(10rem + 1.5rem)', width: '2rem' }
+                    : { left: '-100%' }
+                }
+              />
+            </div>
           </div>
         </div>
       </header>

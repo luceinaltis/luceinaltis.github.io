@@ -25,6 +25,10 @@ a {
   box-sizing: border-box;
 }
 
+.inactive {
+  transition: all 0.2s ease-in-out;
+}
+
 .log__container {
   width:768px;
   margin-left: auto;
