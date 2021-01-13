@@ -5,7 +5,44 @@ import remark from 'remark'
 import html from 'remark-html'
 
 const postsDirectory = path.join(process.cwd(), 'posts')
-// const STATIC_URL = 'https://static.luce.today/'
+
+export function getSortedTags() {
+  const fileNames = fs.readdirSync(postsDirectory)
+
+  const allTags = fileNames.map((fileName) => {
+    const id = fileName.replace(/\.md$/, '')
+
+    const fullPath = path.join(postsDirectory, fileName)
+    const fileContents = fs.readFileSync(fullPath, 'utf8')
+
+    const matterResult = matter(fileContents)
+    const data = matterResult.data
+
+    const tags = data.tags
+
+    return tags
+  })
+
+  const allSortedTags: [string, number][] = []
+
+  allTags.forEach((allTag: string[]) => {
+    allTag.forEach((tag) => {
+      const idx = allSortedTags.findIndex((element) => {
+        return element[0] === tag
+      })
+
+      if (idx === -1) {
+        allSortedTags.push([tag, 1])
+      } else {
+        allSortedTags[idx][1] += 1
+      }
+    })
+  })
+
+  allSortedTags.sort((a, b) => b[1] - a[1])
+
+  return allSortedTags
+}
 
 export function getSortedPostsData() {
   const fileNames = fs.readdirSync(postsDirectory)
