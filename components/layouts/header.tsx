@@ -15,20 +15,18 @@ const Header: NextComponentType = () => {
   const router = useRouter()
 
   useEffect(() => {
+    setheaderMarginTop(0)
+
     if (headerRef.current != null) {
       headerRef.current.style.marginTop = '0px'
     }
 
-    if (null != headerRef.current && router.pathname === '/') {
-      headerRef.current.style.background = 'rgba(248, 249, 250, 0.651)'
+    if (null != headerRef.current && router.pathname !== '/log/[id]') {
+      headerRef.current.style.background = '#f8f9fb'
     }
   }, [router.pathname])
 
   useEffect(() => {
-    if (null != headerRef.current && router.pathname === '/') {
-      headerRef.current.style.background = 'rgb(248, 249, 250)'
-    }
-
     const scrollListener = (): void => {
       if (null != headerRef.current) {
         scrollY.current = window.pageYOffset
@@ -39,8 +37,8 @@ const Header: NextComponentType = () => {
 
         if (scrollY.current < 10) {
           headerRef.current.style.boxShadow = 'none'
-          if (router.pathname === '/') {
-            headerRef.current.style.background = 'rgb(248, 249, 250)'
+          if (router.pathname !== '/log/[id]') {
+            headerRef.current.style.background = '#f8f9fb'
           }
         } else {
           headerRef.current.style.boxShadow = 'rgba(0, 0, 0, 0.08) 0px 0px 8px'

@@ -1,10 +1,23 @@
 import '../styles/globals.scss'
+import '../static/prism.css'
+
 import { AppProps } from 'next/app'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
 import AppLayout from '../components/layout'
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
+  const router = useRouter()
+  useEffect(() => {
+    if (router.pathname === '/log/[id]') {
+      document.body.style.background = 'white'
+    } else {
+      document.body.style.background = '#f8f9fb'
+    }
+  }, [router.pathname])
+
   return (
     <AppLayout>
       <Head>

@@ -1,11 +1,11 @@
 import { NextPage, GetStaticPaths, GetStaticProps } from 'next'
 import Head from 'next/head'
 import { parseISO, format } from 'date-fns'
+import { useEffect } from 'react'
 
 import { getAllPostIds, getPostData } from '../../lib/posts'
 
 import styles from '../../styles/modules/Log.module.scss'
-import { url } from 'inspector'
 
 type Props = {
   postData: {
@@ -21,11 +21,17 @@ type Props = {
 
 const Post: NextPage<Props> = ({ postData }) => {
   const date = parseISO(postData.date)
+
+  useEffect(() => {
+    const scriptTag = document.createElement('script')
+    scriptTag.src = '/static/prism.js'
+    document.body.appendChild(scriptTag)
+  }, [])
+
   return (
     <>
       <Head>
         <title>{postData.title} - luce.log</title>
-        <link rel="stylesheet" href="/static/prism.css" />
       </Head>
       <section className="log__container">
         <div className={styles.head__wrapper}>
@@ -36,7 +42,7 @@ const Post: NextPage<Props> = ({ postData }) => {
           <div className={styles.tags}>
             {postData.tags.map((value, index) => {
               return (
-                <a key={index} href="#">
+                <a key={index} href={`/tags/${value}`}>
                   {value.toUpperCase()}
                 </a>
               )
@@ -44,9 +50,10 @@ const Post: NextPage<Props> = ({ postData }) => {
           </div>
           <img className={styles.thumbnail} src={postData.thumbnail} alt="article thumbnail" />
         </div>
-        <article dangerouslySetInnerHTML={{ __html: postData.contentHtml }}></article>
+        <article>
+          <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
+        </article>
       </section>
-      <script src="/static/prism.js"></script>
     </>
   )
 }

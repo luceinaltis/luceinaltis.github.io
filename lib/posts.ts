@@ -3,6 +3,7 @@ import path from 'path'
 import matter from 'gray-matter'
 import remark from 'remark'
 import html from 'remark-html'
+import prism from 'remark-prism'
 
 const postsDirectory = path.join(process.cwd(), 'posts')
 
@@ -96,6 +97,41 @@ export function getAllPostIds(): Params[] {
   })
 }
 
+type ParamsTag = {
+  params: {
+    tag: string
+  }
+}
+
+export function getTags(): ParamsTag[] {
+  const tagNames = getSortedTags()
+
+  return tagNames.map((tagName) => {
+    return {
+      params: {
+        tag: tagName[0],
+      },
+    }
+  })
+}
+
+type TagPostData = {
+  id: string
+  title: string
+  date: string
+  thumbnail: string
+  description: string
+  tags: string[]
+}
+
+export async function getTagPostsData(tag: string): Promise<TagPostData[]> {
+  const postsData = getSortedPostsData()
+
+  return postsData.filter((value) => {
+    return value.tags.find((element) => element === tag)
+  })
+}
+
 type PostData = {
   id: string
   contentHtml: string
@@ -110,7 +146,7 @@ export async function getPostData(id: string): Promise<PostData> {
   const matterResult = matter(fileContents)
 
   // Use remark to convert markdown into HTML string
-  const processedContent = await remark().use(html).process(matterResult.content)
+  const processedContent = await remark().use(html).use(prism).process(matterResult.content)
 
   const contentHtml = processedContent.toString()
 

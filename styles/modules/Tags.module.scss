@@ -5,4 +5,11 @@
 
 .tags__wrapper {
     margin: -1rem;
+    margin-bottom: 12rem;
+}
+
+@media only screen and (max-width:768px) {
+    .tags__wrapper {
+        margin-bottom: 3rem;
+    }
 }
