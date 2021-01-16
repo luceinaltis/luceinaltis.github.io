@@ -1,0 +1,63 @@
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+    height: 80vh;
+    position: relative;
+    overflow: hidden;
+}
+
+.emoji {
+    min-height: min-content;
+    width: 300px;
+    height: 300px;
+    background: url("https://static.luce.today/404.svg");
+    z-index: 2;
+    background-size: cover;
+}
+
+.desc {
+    font-size: 3rem;
+    line-height: 1.5;
+    color: rgb(50, 52, 58);
+    font-weight: 500;
+    z-index: 1;
+}
+
+.background_404 {
+    position: absolute;
+    top: calc(50% - 25rem);
+    z-index: 1;
+    font-size: 50rem;
+    color: rgba(52, 120, 120, 0.08);
+    font-weight: 600;
+    user-select: none;
+}
+
+@media only screen and (max-width: 1056px) {
+    .background_404 {
+        top: calc(50% - 20rem);
+        font-size: 40rem;
+    }
+}
+
+
+@media only screen and (max-width: 768px) {
+    .emoji {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .desc {
+        font-size: 2rem;
+    }
+
+    .background_404 {
+        top: calc(50% - 10rem);
+        font-size: 20rem;
+    }
+}
