@@ -1,0 +1,139 @@
+.head {
+    display: flex;
+    padding-bottom: 2rem;
+    justify-content: space-between;
+    align-items: center;
+    line-height: 1.5;
+    color: rgb(30, 33, 35);
+    word-break: break-all;
+    overflow-wrap: break-word;
+
+    .head__name {
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 500;
+        }
+        h2 {
+            font-size: 1.75rem;
+        }
+
+    }
+
+    img {
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+    }
+}
+
+.link {
+    line-height: 1.5;
+    color: rgb(50, 53, 55);
+    margin-top: .2rem;
+    padding-bottom: .8rem;
+    border-bottom: 2px solid rgb(240, 240, 245);
+
+    span {
+        display: inline-flex;
+        padding-right: 1rem;
+
+        a {
+            color: #52acac;
+        &:hover {
+              text-decoration: underline;
+            }
+        }
+
+        i {
+            font-size: 1.2rem;
+            margin-right: .2rem;
+            color: rgb(100, 110, 115);
+        }
+    }
+}
+
+
+.info {
+    color: rgb(60, 63, 65);
+    line-height: 1.5;
+
+    p {
+        margin: 2rem 0rem 3rem;
+        border-left: 4px solid #52acac;
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+        background-color: rgb(245, 246, 250);
+        padding: 1rem 1rem 1rem 2rem;
+    }
+
+    ul {
+        list-style-type: disc;
+        padding-left: 1.5rem;
+        margin-block-start: 2em;
+        margin-block-end: 2.5em;
+        
+        li {
+            .cell {
+                display: grid;
+                grid-template-columns: 3fr 1fr;
+
+                .right {
+                    color: rgb(100, 110, 115);
+                    font-size: .875rem;
+                    padding-right: 2rem;
+                }
+            }
+
+            .skill {
+                display: grid;
+                grid-template-columns: 1fr 7fr;
+            }
+
+            span:first-child {
+                font-weight: 600;
+                margin-right: .5rem;
+            }
+        }
+
+        label {
+            display: block;
+            height: 30px;
+            font-weight: 600;
+            margin-left: -1.5rem;
+        }
+    }
+}
+
+.bottom {
+    a {
+        margin-left: .3rem;
+        color: #52acac;
+        &:hover {
+          text-decoration: underline;
+        }
+    }
+
+    div:last-child {
+        font-size: .875rem;
+        color: rgb(120, 130, 135);
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .link {
+        font-size: .875rem;
+    }
+
+    .info {
+        ul {
+            li {
+                .skill {
+                    display: grid;
+                    grid-template-columns: none;
+                    margin-bottom: .2rem;
+                }
+            }
+        }
+    }
+}
