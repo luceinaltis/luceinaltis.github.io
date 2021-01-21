@@ -1,5 +1,6 @@
 import { NextPage, GetStaticPaths, GetStaticProps } from 'next'
 import Link from 'next/link'
+import Head from 'next/head'
 
 import { getTags, getTagPostsData } from '../../lib/posts'
 import Date from '../../components/date'
@@ -21,8 +22,16 @@ type Props = {
 }
 
 const TagPosts: NextPage<Props> = ({ tagPostsData, tag }) => {
+  const capitalize = (s: string): string => {
+    if (typeof s !== 'string') return ''
+    return s.charAt(0).toUpperCase() + s.slice(1)
+  }
+
   return (
     <>
+      <Head>
+        <title>{`#${capitalize(tag)} - luce.log`}</title>
+      </Head>
       <section className="tag__container">
         <div className={styles.tag__header}>#{tag}</div>
         <div>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import Head from 'next/head'
 
 import { GetStaticProps } from 'next'
@@ -23,7 +23,7 @@ const Home = ({
   return (
     <>
       <Head>
-        <title>마이 프레셔스</title>
+        <title>luce.log</title>
       </Head>
       <main className="home__container">
         <div className={styles.wrapper}>

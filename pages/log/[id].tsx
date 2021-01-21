@@ -16,6 +16,7 @@ type Props = {
     contentHtml: string
     tags: string[]
     thumbnail: string
+    description: string
   }
 }
 
@@ -31,8 +32,19 @@ const Post: NextPage<Props> = ({ postData }) => {
   return (
     <>
       <Head>
-        <title>{postData.title} - luce.log</title>
+        <title>{postData.title}</title>
+        <meta name="description" content={postData.description} />
+        <meta property="og:url" content={`https://www.luce.today/log/${postData.id}`} />
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content={postData.title} />
+        <meta property="og:description" content={postData.description} />
+        <meta property="og:image" content={postData.thumbnail} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={postData.title} />
+        <meta name="twitter:description" content={postData.description} />
+        <meta name="twitter:image" content={postData.thumbnail} />
       </Head>
+      {/* <meta name="keywords" content={postData.tags.map((value) => value)} /> */}
       <section className="log__container">
         <div className={styles.head__wrapper}>
           <h1>{postData.title}</h1>

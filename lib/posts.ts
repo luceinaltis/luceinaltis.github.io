@@ -3,6 +3,7 @@ import path from 'path'
 import matter from 'gray-matter'
 import remark from 'remark'
 import html from 'remark-html'
+// @ts-ignore
 import prism from 'remark-prism'
 
 const postsDirectory = path.join(process.cwd(), 'posts')

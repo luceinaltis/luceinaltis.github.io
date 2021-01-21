@@ -28,6 +28,8 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
           crossOrigin="anonymous"
         />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Crimson+Pro" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="canonical" href={`https://www.luce.today${router.asPath}`} />
       </Head>
       <Component {...pageProps} />
     </AppLayout>

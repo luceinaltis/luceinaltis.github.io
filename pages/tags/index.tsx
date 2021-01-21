@@ -1,4 +1,5 @@
 import { NextPage, GetStaticProps } from 'next'
+import Head from 'next/head'
 
 import { getSortedTags } from '../../lib/posts'
 import TagTemplate from '../../components/tagTemplate'
@@ -11,15 +12,20 @@ type Props = {
 
 const Tags: NextPage<Props> = ({ tags }) => {
   return (
-    <main className="home__container">
-      <div className={styles.wrapper}>
-        <div className={styles.tags__wrapper}>
-          {tags.map((value, idx: number) => {
-            return <TagTemplate key={idx} {...value} />
-          })}
+    <>
+      <Head>
+        <title>태그 - luce.log</title>
+      </Head>
+      <main className="home__container">
+        <div className={styles.wrapper}>
+          <div className={styles.tags__wrapper}>
+            {tags.map((value, idx: number) => {
+              return <TagTemplate key={idx} {...value} />
+            })}
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </>
   )
 }
 
