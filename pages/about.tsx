@@ -5,7 +5,7 @@ const About = (): JSX.Element => {
   return (
     <>
       <Head>
-        <title>404 - luce.log</title>
+        <title>소개 - luce.log</title>
       </Head>
       <section className="about__container">
         <div className={styles.head}>
