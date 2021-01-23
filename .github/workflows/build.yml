@@ -9,15 +9,5 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2 # If you're using actions/checkout@v2 you must set persist-credentials to false in most cases for the deployment to work correctly.
-
-      # - name: Node.js 환경 설치
-      #   uses: actions/setup-node@v2.1.4
-      #   with:
-      #     node-version: 14.14
-          
-      - run: node -v
-      - run: npm -v
-      
-      # - name: Next.js 빌드 파일 생성
-      #   run: npm run deploy
+      - uses: actions/checkout@v2
+      - run: npm run build
