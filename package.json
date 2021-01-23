@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "ad": "asd",
     "build": "rm -rf node_modules/.cache && next build && next export && touch out/.nojekyll"
   },
   "dependencies": {
