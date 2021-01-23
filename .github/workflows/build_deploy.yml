@@ -5,14 +5,14 @@ on:
     branches: [ master ]
 
 jobs:
-  build_deploy:
+  BUILD_DEPLOY:
     runs-on: ubuntu-latest
 
     steps:
+      - run: echo ${{secrets.PAT}}
       - uses: actions/checkout@v2
         with:
           token: ${{secrets.PAT}}
-      - run: echo ${{secrets.PAT}}
 
       - run:  |          
           git config user.name github-actions
