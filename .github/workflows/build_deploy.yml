@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v2
       - run: npm install
       - run: npm run build
-      - run:  git add out/ 
+      - run:  git add -f out/ 
       - run:  git commit -m "deploy Next.js to gh-pages"
       - run:  git subtree push --prefix out origin gh-pages
       - uses: actions/cache@v2
