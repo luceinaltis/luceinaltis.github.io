@@ -15,13 +15,15 @@ jobs:
       - run:  |          
           git config user.name luceinaltis
           git config user.email luceinaltis2020@naver.com
-      - run: npm install
-      - run: npm run build
-      - run:  git add -f out/ 
-      - run:  git commit -m "Deploy Next.js to gh-pages"
-      - run:  git push --prefix out origin gh-pages
+
       - uses: actions/cache@v2
         id: cache-build
         with:
           path: ./*
           key: ${{ github.sha }}
+      - run: npm install
+      - run: npm run build
+      - run:  git pull
+      - run:  git add -f out/ 
+      - run:  git commit -m "Deploy Next.js to gh-pages"
+      - run:  git subtree push --prefix out origin gh-pages
