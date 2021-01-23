@@ -3,6 +3,9 @@
 package-lock.json
 yarn.lock
 
+/.vscode/
+/out/
+
 # dependencies
 /node_modules
 /.pnp
@@ -16,6 +19,8 @@ yarn.lock
 
 # production
 /build
+
+
 
 # misc
 .DS_Store
