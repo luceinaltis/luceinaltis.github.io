@@ -43,6 +43,7 @@ const Post: NextPage<Props> = ({ postData }) => {
         <meta name="twitter:title" content={postData.title} />
         <meta name="twitter:description" content={postData.description} />
         <meta name="twitter:image" content={postData.thumbnail} />
+        <meta name="keywords" content={postData.tags.join(',')} />
       </Head>
       {/* <meta name="keywords" content={postData.tags.map((value) => value)} /> */}
       <section className="log__container">

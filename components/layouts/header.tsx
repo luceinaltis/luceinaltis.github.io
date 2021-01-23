@@ -31,10 +31,6 @@ const Header: NextComponentType = () => {
       if (null != headerRef.current) {
         scrollY.current = window.pageYOffset
 
-        if (scrollY.current < 30) {
-          setheaderMarginTop(0)
-        }
-
         if (scrollY.current < 10) {
           headerRef.current.style.boxShadow = 'none'
           if (router.pathname !== '/log/[id]') {
@@ -62,14 +58,8 @@ const Header: NextComponentType = () => {
           setheaderMarginTop(nextHeaderMarginTop)
         }
 
-        if (
-          prevScrollY.current < scrollY.current &&
-          window.innerHeight + scrollY.current >= document.documentElement.scrollHeight - height / 2
-        ) {
-          setheaderMarginTop(-height)
-          if (headerRef && headerRef.current) {
-            headerRef.current.style.marginTop = `-${height}px`
-          }
+        if (scrollY.current < 10) {
+          setheaderMarginTop(0)
         }
 
         headerRef.current.style.marginTop = `${headerMarginTop}px`
@@ -79,10 +69,10 @@ const Header: NextComponentType = () => {
 
     const throttledListener = (): void => {
       if (!throttle.current) {
+        scrollListener()
         setTimeout(() => {
-          scrollListener()
           throttle.current = false
-        }, 10)
+        }, 3)
       }
       throttle.current = true
     }

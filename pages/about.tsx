@@ -6,6 +6,17 @@ const About = (): JSX.Element => {
     <>
       <Head>
         <title>소개 - luce.log</title>
+        <meta property="og:url" content="https://www.luce.today/about" />
+        <meta property="og:title" content="소개 - luce.log" />
+        <meta property="og:type" content="website" />
+        {/* 사이트 이미지 */}
+        {/* <meta property="og:image" content="https://devtalk.kakao.com/images/devtalk_.png" /> */}
+        <meta property="og:description" content="제가 배우고 생각한 것을 기록하는 공간입니다." />
+        <meta name="description" content="제가 배우고 생각한 것을 기록하는 공간입니다." />
+        <meta
+          name="keywords"
+          content="개발자,developer,backend,frontend,devops,api,web,웹,모바일,소프트웨어,엔지니어링,프론트엔드,백엔드,아키텍처,기록"
+        />
       </Head>
       <section className="about__container">
         <div className={styles.head}>
@@ -36,8 +47,7 @@ const About = (): JSX.Element => {
           <p>
             궁금한게 있으면 가리지않고 배우는 개발자입니다. <br />
             대학생때부터 개발에 흥미를 가지고 소프트웨어 엔지니어링에 대해 공부하고 있습니다. <br />
-            블로그를 운영하면서 문제해결능력에 관심이 생겨 글을 읽고 핵심을 파악하여 생각을 정리하는
-            능력을 기르고 있습니다.
+            블로그를 운영하면서 글을 읽고 생각을 정리하는 능력을 기르고 있습니다.
           </p>
           <ul>
             <label htmlFor="EDUCATION">EDUCATION</label>

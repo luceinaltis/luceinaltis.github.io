@@ -2,7 +2,8 @@
     display: flex;
     width: 100%;
     position: fixed;
-    transition: margin-top 0.02s linear, box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    // transition: margin-top 1ms linear, box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    transition: box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out;
     background: white;
     z-index: 1;
     color: rgb(104, 112, 120);
@@ -80,11 +81,11 @@
 
 @media only screen and (max-width: 768px) {
     .header {
-        height: 7.5rem;
+        height: 7rem;
     }
 
     .categories__wrapper {
-        margin-top: .5rem;
+        margin-top: 0rem;
 
         a {
             width: 5rem;
