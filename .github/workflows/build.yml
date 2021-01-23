@@ -1,0 +1,21 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Node.js 환경 설치
+        uses: actions/setup-node@v2.1.4
+        with:
+          node-version: 14.14
+          
+      - name: node_modules 설치
+        run: npm install
+      
+      - name: Next.js 빌드 파일 생성
+        run: npm run deploy
