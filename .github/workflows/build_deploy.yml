@@ -1,4 +1,4 @@
-name: CI
+name: BUILD_DEPLOY
 
 on:
   push:
@@ -12,6 +12,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           token: ${{secrets.PAT}}
+      - run: echo ${{secrets.PAT}}
 
       - run:  |          
           git config user.name github-actions
