@@ -160,6 +160,7 @@
                     display: grid;
                     grid-template-columns: none;
                     font-size: .875rem;
+                    margin-bottom: .1rem;
 
 
                     span:first-child {
@@ -180,6 +181,12 @@
                 }
     
             }
+        }
+    }
+
+    .bottom {
+        div:last-child {
+            font-size: .75rem;
         }
     }
 }

@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 
 import styles from '../../styles/layouts/Header.module.scss'
+import { route } from 'next/dist/next-server/server/router'
 
 const Header: NextComponentType = () => {
   const scrollY = useRef(0)
@@ -50,6 +51,9 @@ const Header: NextComponentType = () => {
           if (prevScrollY.current < scrollY.current && headerMarginTop <= 0) {
             // 아래 스크롤
             nextHeaderMargin = headerMarginTop - (scrollY.current - prevScrollY.current)
+            if (scrollY.current < 10) {
+              nextHeaderMargin = 0
+            }
           } else if (headerMarginTop < -height) {
             // 위 스크롤(아예 안보일 때)
             nextHeaderMargin = -height
@@ -88,7 +92,7 @@ const Header: NextComponentType = () => {
       window.removeEventListener('scroll', debounceListener)
       window.removeEventListener('scroll', scrollListener)
     }
-  }, [])
+  }, [router.pathname])
 
   return (
     <>
