@@ -121,18 +121,61 @@
 }
 
 @media only screen and (max-width: 768px) {
+    .head {
+        flex-direction: column-reverse;
+        gap: 1rem;
+
+        img {
+            width: 100px;
+            height: 100px;
+        }
+
+        .head__name {
+            text-align: center;
+
+            h1 {
+                font-size: 1.75rem;
+            }
+            h2 {
+                font-size: 1.5rem;
+            }
+        }
+    }
+
     .link {
         font-size: .875rem;
     }
 
     .info {
+        p {
+            font-size: .875rem;
+        }
+
         ul {
             li {
                 .skill {
                     display: grid;
                     grid-template-columns: none;
-                    margin-bottom: .2rem;
+                    font-size: .875rem;
+
+
+                    span:first-child {
+                        font-size: 1rem;
+                    }
                 }
+
+                .cell {
+                    display: grid;
+                    grid-template-columns: 3fr 1fr;
+                    font-size: .875rem;
+
+                    .right {
+                        color: rgb(100, 110, 115);
+                        font-size: .75rem;
+                        padding-right: 0rem;
+                    }
+                }
+    
             }
         }
     }

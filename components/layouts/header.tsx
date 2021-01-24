@@ -9,14 +9,11 @@ const Header: NextComponentType = () => {
   const scrollY = useRef(0)
   const prevScrollY = useRef(0)
   const headerRef = useRef<HTMLHeadingElement>(null)
-  const [headerMarginTop, setheaderMarginTop] = useState(0)
-  const throttle = useRef(false)
 
+  const throttle = useRef(false)
   const router = useRouter()
 
   useEffect(() => {
-    setheaderMarginTop(0)
-
     if (headerRef.current != null) {
       headerRef.current.style.marginTop = '0px'
     }
@@ -29,6 +26,7 @@ const Header: NextComponentType = () => {
   useEffect(() => {
     const scrollListener = (): void => {
       if (null != headerRef.current) {
+        let nextHeaderMarginTop = 0
         scrollY.current = window.pageYOffset
 
         if (scrollY.current < 10) {
@@ -42,46 +40,43 @@ const Header: NextComponentType = () => {
         }
 
         const height = headerRef.current.getBoundingClientRect().height
+        const headerMarginTop = parseInt(headerRef.current.style.marginTop)
 
         if (prevScrollY.current < scrollY.current && headerMarginTop <= 0) {
           // 아래 스크롤
-          setheaderMarginTop(headerMarginTop - (scrollY.current - prevScrollY.current))
+          nextHeaderMarginTop = headerMarginTop - (scrollY.current - prevScrollY.current)
         } else if (headerMarginTop < -height) {
           // 위 스크롤(아예 안보일 때)
-          setheaderMarginTop(-height)
+          nextHeaderMarginTop = -height
         } else if (headerMarginTop < 0) {
           // 위 스크롤(조금 보일 때)
-          let nextHeaderMarginTop = headerMarginTop + (-scrollY.current + prevScrollY.current)
+          nextHeaderMarginTop = headerMarginTop + (-scrollY.current + prevScrollY.current)
           if (nextHeaderMarginTop > 0) {
             nextHeaderMarginTop = 0
           }
-          setheaderMarginTop(nextHeaderMarginTop)
         }
 
-        if (scrollY.current < 10) {
-          setheaderMarginTop(0)
-        }
-
-        headerRef.current.style.marginTop = `${headerMarginTop}px`
+        headerRef.current.style.marginTop = `${nextHeaderMarginTop}px`
         prevScrollY.current = scrollY.current
       }
     }
 
     const throttledListener = (): void => {
+      scrollListener()
       if (!throttle.current) {
-        scrollListener()
         setTimeout(() => {
+          console.log('실행')
           throttle.current = false
-        }, 3)
+        }, 5)
       }
       throttle.current = true
     }
 
-    window.addEventListener('scroll', throttledListener)
+    window.addEventListener('scroll', scrollListener)
     return () => {
-      window.removeEventListener('scroll', throttledListener)
+      window.removeEventListener('scroll', scrollListener)
     }
-  }, [headerMarginTop])
+  }, [])
 
   return (
     <>
