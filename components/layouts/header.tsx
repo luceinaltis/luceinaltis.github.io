@@ -68,14 +68,14 @@ const Header: NextComponentType = () => {
 
         const start = Date.now()
         const timer = requestAnimationFrame(function animateMargin(timestamp) {
-          const interval = Date.now() - start
+          // const interval = Date.now() - start
 
           if (headerRef.current) {
             headerRef.current.style.marginTop = `${nextHeaderMargin}px`
           }
           // football.style.top = interval / 3 + 'px' // move element down
 
-          if (interval < 10) requestAnimationFrame(animateMargin) // queue request for next frame
+          // if (interval < 10) requestAnimationFrame(animateMargin) // queue request for next frame
         })
 
         prevScrollY.current = scrollY.current
