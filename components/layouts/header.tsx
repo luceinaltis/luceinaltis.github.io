@@ -58,6 +58,7 @@ const Header: NextComponentType = () => {
 
           headerRef.current.style.marginTop = `${nextHeaderMargin}px`
           prevScrollY.current = scrollY.current
+          console.log(Date.now())
         }
       })
     }
