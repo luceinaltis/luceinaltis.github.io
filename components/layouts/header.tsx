@@ -62,19 +62,18 @@ const Header: NextComponentType = () => {
     }
 
     const throttledListener = (): void => {
-      scrollListener()
       if (!throttle.current) {
         setTimeout(() => {
-          console.log('실행')
+          scrollListener()
           throttle.current = false
-        }, 5)
+        }, 30)
       }
       throttle.current = true
     }
 
-    window.addEventListener('scroll', scrollListener)
+    window.addEventListener('scroll', throttledListener)
     return () => {
-      window.removeEventListener('scroll', scrollListener)
+      window.removeEventListener('scroll', throttledListener)
     }
   }, [])
 
