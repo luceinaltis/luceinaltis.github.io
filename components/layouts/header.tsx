@@ -8,8 +8,9 @@ import styles from '../../styles/layouts/Header.module.scss'
 const Header: NextComponentType = () => {
   const scrollY = useRef(0)
   const prevScrollY = useRef(0)
-  const throttle = useRef(false)
+  const debounce = useRef<NodeJS.Timeout>()
   const headerRef = useRef<HTMLHeadingElement>(null)
+  const logoRef = useRef<HTMLHeadingElement>(null)
 
   const router = useRouter()
 
@@ -56,25 +57,31 @@ const Header: NextComponentType = () => {
             }
           }
 
+          if (logoRef.current != null) {
+            logoRef.current.style.animationPlayState = 'paused'
+          }
           headerRef.current.style.marginTop = `${nextHeaderMargin}px`
           prevScrollY.current = scrollY.current
-          console.log(Date.now())
         }
       })
     }
 
-    // const throttledListener = (): void => {
-    //   if (!throttle.current) {
-    //     setTimeout(() => {
-    //       scrollListener()
-    //       throttle.current = false
-    //     }, 8)
-    //   }
-    //   throttle.current = true
-    // }
+    const debounceListener = (): void => {
+      if (debounce.current) {
+        clearTimeout(debounce.current)
+      }
 
+      debounce.current = setTimeout(() => {
+        if (logoRef.current) {
+          logoRef.current.style.animationPlayState = 'running'
+        }
+      }, 500)
+    }
+
+    window.addEventListener('scroll', debounceListener)
     window.addEventListener('scroll', scrollListener)
     return () => {
+      window.removeEventListener('scroll', debounceListener)
       window.removeEventListener('scroll', scrollListener)
     }
   }, [])
@@ -86,7 +93,9 @@ const Header: NextComponentType = () => {
           <div className={styles.logo__wrapper}>
             <Link href="/">
               <a>
-                <div className={styles.logo}>luce.log</div>
+                <div className={styles.logo} ref={logoRef}>
+                  luce.log
+                </div>
               </a>
             </Link>
           </div>
