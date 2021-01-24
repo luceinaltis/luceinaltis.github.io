@@ -1,5 +1,5 @@
 import { NextComponentType } from 'next'
-import { useEffect, useRef, useCallback } from 'react'
+import { useEffect, useRef, useCallback, useState, useMemo } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 
@@ -9,43 +9,42 @@ const Header: NextComponentType = () => {
   const scrollY = useRef(0)
   const prevScrollY = useRef(0)
   const headerRef = useRef<HTMLHeadingElement>(null)
+  const [nextHeaderMarginTop, setNextHeaderMarginTop] = useState(0)
 
-  const throttle = useRef(false)
   const router = useRouter()
 
   const scrollListener = useCallback((): void => {
     if (null != headerRef.current) {
-      let nextHeaderMarginTop = 0
       scrollY.current = window.pageYOffset
 
-      // if (scrollY.current < 10) {
-      //   headerRef.current.style.boxShadow = 'none'
-      //   if (router.pathname !== '/log/[id]') {
-      //     headerRef.current.style.background = '#f8f9fb'
-      //   }
-      // } else {
-      //   headerRef.current.style.boxShadow = 'rgba(0, 0, 0, 0.08) 0px 0px 8px'
-      //   headerRef.current.style.background = '#ffffff'
-      // }
+      if (scrollY.current < 10) {
+        headerRef.current.style.boxShadow = 'none'
+        if (router.pathname !== '/log/[id]') {
+          headerRef.current.style.background = '#f8f9fb'
+        }
+      } else {
+        headerRef.current.style.boxShadow = 'rgba(0, 0, 0, 0.08) 0px 0px 8px'
+        headerRef.current.style.background = '#ffffff'
+      }
 
       const height = headerRef.current.getBoundingClientRect().height
       const headerMarginTop = parseInt(headerRef.current.style.marginTop)
-
+      let nextHeaderMargin = 0
       if (prevScrollY.current < scrollY.current && headerMarginTop <= 0) {
         // 아래 스크롤
-        nextHeaderMarginTop = headerMarginTop - (scrollY.current - prevScrollY.current)
+        nextHeaderMargin = headerMarginTop - (scrollY.current - prevScrollY.current)
       } else if (headerMarginTop < -height) {
         // 위 스크롤(아예 안보일 때)
-        nextHeaderMarginTop = -height
+        nextHeaderMargin = -height
       } else if (headerMarginTop < 0) {
         // 위 스크롤(조금 보일 때)
-        nextHeaderMarginTop = headerMarginTop + (-scrollY.current + prevScrollY.current)
-        if (nextHeaderMarginTop > 0) {
-          nextHeaderMarginTop = 0
+        nextHeaderMargin = headerMarginTop + (-scrollY.current + prevScrollY.current)
+        if (nextHeaderMargin > 0) {
+          nextHeaderMargin = 0
         }
       }
 
-      headerRef.current.style.marginTop = `${nextHeaderMarginTop}px`
+      setNextHeaderMarginTop(nextHeaderMargin)
       prevScrollY.current = scrollY.current
     }
   }, [])
@@ -62,7 +61,7 @@ const Header: NextComponentType = () => {
 
   useEffect(() => {
     if (headerRef.current != null) {
-      headerRef.current.style.marginTop = '0px'
+      setNextHeaderMarginTop(0)
     }
 
     if (null != headerRef.current && router.pathname !== '/log/[id]') {
@@ -79,7 +78,11 @@ const Header: NextComponentType = () => {
 
   return (
     <>
-      <header className={styles.header_fixed} ref={headerRef}>
+      <header
+        className={styles.header_fixed}
+        ref={headerRef}
+        style={{ marginTop: `${nextHeaderMarginTop}px` }}
+      >
         <div className={`home__container`}>
           <div className={styles.logo__wrapper}>
             <Link href="/">
