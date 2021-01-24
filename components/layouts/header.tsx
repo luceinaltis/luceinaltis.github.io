@@ -22,6 +22,10 @@ const Header: NextComponentType = () => {
     if (null != headerRef.current && router.pathname !== '/log/[id]') {
       headerRef.current.style.background = '#f8f9fb'
     }
+
+    if (null != headerRef.current && router.pathname === '/log/[id]') {
+      headerRef.current.style.background = '#ffffff'
+    }
   }, [router.pathname])
 
   useEffect(() => {
