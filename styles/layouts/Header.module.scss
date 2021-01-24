@@ -2,8 +2,7 @@
     position: fixed;
     display: block;
     width: 100%;
-    // transition: margin-top 10ms linear, box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out;
-    // transition: box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    transition: box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out;
     background: white;
     z-index: 1;
     color: rgb(104, 112, 120);
