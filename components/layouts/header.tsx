@@ -55,7 +55,7 @@ const Header: NextComponentType = () => {
       setTimeout(() => {
         scrollListener()
         throttle.current = false
-      }, 10)
+      }, 5)
     }
     throttle.current = true
   }, [])
