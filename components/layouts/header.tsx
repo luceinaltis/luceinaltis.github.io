@@ -25,7 +25,7 @@ const Header: NextComponentType = () => {
 
   useEffect(() => {
     const scrollListener = (): void => {
-      requestAnimationFrame(function animateMargin() {
+      requestAnimationFrame(() => {
         if (null != headerRef.current) {
           scrollY.current = window.pageYOffset
 
