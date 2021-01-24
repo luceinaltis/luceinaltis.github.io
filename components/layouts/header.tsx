@@ -62,19 +62,19 @@ const Header: NextComponentType = () => {
       })
     }
 
-    const throttledListener = (): void => {
-      if (!throttle.current) {
-        setTimeout(() => {
-          scrollListener()
-          throttle.current = false
-        }, 8)
-      }
-      throttle.current = true
-    }
+    // const throttledListener = (): void => {
+    //   if (!throttle.current) {
+    //     setTimeout(() => {
+    //       scrollListener()
+    //       throttle.current = false
+    //     }, 8)
+    //   }
+    //   throttle.current = true
+    // }
 
-    window.addEventListener('scroll', throttledListener)
+    window.addEventListener('scroll', scrollListener)
     return () => {
-      window.removeEventListener('scroll', throttledListener)
+      window.removeEventListener('scroll', scrollListener)
     }
   }, [])
 
