@@ -13,7 +13,6 @@ const Header: NextComponentType = () => {
   const throttle = useRef(false)
 
   const router = useRouter()
-  const height = 128
 
   const scrollListener = (): void => {
     if (null != headerRef.current) {
@@ -29,7 +28,7 @@ const Header: NextComponentType = () => {
         headerRef.current.style.background = '#ffffff'
       }
 
-      // const height = headerRef.current.getBoundingClientRect().height
+      const height = headerRef.current.getBoundingClientRect().height
       const headerMarginTop = parseInt(headerRef.current.style.marginTop)
       let nextHeaderMargin = 0
       if (prevScrollY.current < scrollY.current && headerMarginTop <= 0) {
@@ -93,7 +92,7 @@ const Header: NextComponentType = () => {
               </a>
             </Link>
           </div>
-          <div>
+          {/* <div>
             <div className={styles.categories__wrapper}>
               <Link href="/">
                 <a className={router.pathname === '/' ? styles.active : styles.inactive}>기록</a>
@@ -133,7 +132,7 @@ const Header: NextComponentType = () => {
                 }
               />
             </div>
-          </div>
+          </div> */}
         </div>
       </header>
       <header className={styles.header} />
