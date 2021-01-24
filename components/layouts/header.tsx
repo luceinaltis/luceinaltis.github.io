@@ -25,65 +25,56 @@ const Header: NextComponentType = () => {
 
   useEffect(() => {
     const scrollListener = (): void => {
-      if (null != headerRef.current) {
-        scrollY.current = window.pageYOffset
+      requestAnimationFrame(function animateMargin() {
+        if (null != headerRef.current) {
+          scrollY.current = window.pageYOffset
 
-        if (scrollY.current < 10) {
-          headerRef.current.style.boxShadow = 'none'
-          if (router.pathname !== '/log/[id]') {
-            headerRef.current.style.background = '#f8f9fb'
+          if (scrollY.current < 10) {
+            headerRef.current.style.boxShadow = 'none'
+            if (router.pathname !== '/log/[id]') {
+              headerRef.current.style.background = '#f8f9fb'
+            }
+          } else {
+            headerRef.current.style.boxShadow = 'rgba(0, 0, 0, 0.08) 0px 0px 8px'
+            headerRef.current.style.background = '#ffffff'
           }
-        } else {
-          headerRef.current.style.boxShadow = 'rgba(0, 0, 0, 0.08) 0px 0px 8px'
-          headerRef.current.style.background = '#ffffff'
+
+          const height = headerRef.current.getBoundingClientRect().height
+          const headerMarginTop = parseInt(headerRef.current.style.marginTop)
+          let nextHeaderMargin = 0
+          if (prevScrollY.current < scrollY.current && headerMarginTop <= 0) {
+            // 아래 스크롤
+            nextHeaderMargin = headerMarginTop - (scrollY.current - prevScrollY.current)
+          } else if (headerMarginTop < -height) {
+            // 위 스크롤(아예 안보일 때)
+            nextHeaderMargin = -height
+          } else if (headerMarginTop < 0) {
+            // 위 스크롤(조금 보일 때)
+            nextHeaderMargin = headerMarginTop + (-scrollY.current + prevScrollY.current)
+            if (nextHeaderMargin > 0) {
+              nextHeaderMargin = 0
+            }
+          }
+
+          headerRef.current.style.marginTop = `${nextHeaderMargin}px`
+          prevScrollY.current = scrollY.current
         }
-
-        const height = headerRef.current.getBoundingClientRect().height
-        const headerMarginTop = parseInt(headerRef.current.style.marginTop)
-        let nextHeaderMargin = 0
-        if (prevScrollY.current < scrollY.current && headerMarginTop <= 0) {
-          // 아래 스크롤
-          nextHeaderMargin = headerMarginTop - (scrollY.current - prevScrollY.current)
-        } else if (headerMarginTop < -height) {
-          // 위 스크롤(아예 안보일 때)
-          nextHeaderMargin = -height
-        } else if (headerMarginTop < 0) {
-          // 위 스크롤(조금 보일 때)
-          nextHeaderMargin = headerMarginTop + (-scrollY.current + prevScrollY.current)
-          if (nextHeaderMargin > 0) {
-            nextHeaderMargin = 0
-          }
-        }
-
-        const start = Date.now()
-        const timer = requestAnimationFrame(function animateMargin(timestamp) {
-          // const interval = Date.now() - start
-
-          if (headerRef.current) {
-            headerRef.current.style.marginTop = `${nextHeaderMargin}px`
-          }
-          // football.style.top = interval / 3 + 'px' // move element down
-
-          // if (interval < 10) requestAnimationFrame(animateMargin) // queue request for next frame
-        })
-
-        prevScrollY.current = scrollY.current
-      }
+      })
     }
 
-    const throttledListener = (): void => {
-      if (!throttle.current) {
-        setTimeout(() => {
-          scrollListener()
-          throttle.current = false
-        }, 16)
-      }
-      throttle.current = true
-    }
+    // const throttledListener = (): void => {
+    //   if (!throttle.current) {
+    //     setTimeout(() => {
+    //       scrollListener()
+    //       throttle.current = false
+    //     }, 16)
+    //   }
+    //   throttle.current = true
+    // }
 
-    window.addEventListener('scroll', throttledListener)
+    window.addEventListener('scroll', scrollListener)
     return () => {
-      window.removeEventListener('scroll', throttledListener)
+      window.removeEventListener('scroll', scrollListener)
     }
   }, [])
 
