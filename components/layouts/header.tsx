@@ -14,42 +14,6 @@ const Header: NextComponentType = () => {
 
   const router = useRouter()
 
-  const scrollListener = (): void => {
-    if (null != headerRef.current) {
-      scrollY.current = window.pageYOffset
-
-      if (scrollY.current < 10) {
-        headerRef.current.style.boxShadow = 'none'
-        if (router.pathname !== '/log/[id]') {
-          headerRef.current.style.background = '#f8f9fb'
-        }
-      } else {
-        headerRef.current.style.boxShadow = 'rgba(0, 0, 0, 0.08) 0px 0px 8px'
-        headerRef.current.style.background = '#ffffff'
-      }
-
-      const height = headerRef.current.getBoundingClientRect().height
-      const headerMarginTop = parseInt(headerRef.current.style.marginTop)
-      let nextHeaderMargin = 0
-      if (prevScrollY.current < scrollY.current && headerMarginTop <= 0) {
-        // 아래 스크롤
-        nextHeaderMargin = headerMarginTop - (scrollY.current - prevScrollY.current)
-      } else if (headerMarginTop < -height) {
-        // 위 스크롤(아예 안보일 때)
-        nextHeaderMargin = -height
-      } else if (headerMarginTop < 0) {
-        // 위 스크롤(조금 보일 때)
-        nextHeaderMargin = headerMarginTop + (-scrollY.current + prevScrollY.current)
-        if (nextHeaderMargin > 0) {
-          nextHeaderMargin = 0
-        }
-      }
-
-      setNextHeaderMarginTop(nextHeaderMargin)
-      prevScrollY.current = scrollY.current
-    }
-  }
-
   // const throttledListener = useCallback((): void => {
   //   if (!throttle.current) {
   //     setTimeout(() => {
@@ -71,6 +35,42 @@ const Header: NextComponentType = () => {
   }, [router.pathname])
 
   useEffect(() => {
+    const scrollListener = (): void => {
+      if (null != headerRef.current) {
+        scrollY.current = window.pageYOffset
+
+        if (scrollY.current < 10) {
+          headerRef.current.style.boxShadow = 'none'
+          if (router.pathname !== '/log/[id]') {
+            headerRef.current.style.background = '#f8f9fb'
+          }
+        } else {
+          headerRef.current.style.boxShadow = 'rgba(0, 0, 0, 0.08) 0px 0px 8px'
+          headerRef.current.style.background = '#ffffff'
+        }
+
+        const height = headerRef.current.getBoundingClientRect().height
+        const headerMarginTop = parseInt(headerRef.current.style.marginTop)
+        let nextHeaderMargin = 0
+        if (prevScrollY.current < scrollY.current && headerMarginTop <= 0) {
+          // 아래 스크롤
+          nextHeaderMargin = headerMarginTop - (scrollY.current - prevScrollY.current)
+        } else if (headerMarginTop < -height) {
+          // 위 스크롤(아예 안보일 때)
+          nextHeaderMargin = -height
+        } else if (headerMarginTop < 0) {
+          // 위 스크롤(조금 보일 때)
+          nextHeaderMargin = headerMarginTop + (-scrollY.current + prevScrollY.current)
+          if (nextHeaderMargin > 0) {
+            nextHeaderMargin = 0
+          }
+        }
+
+        setNextHeaderMarginTop(nextHeaderMargin)
+        prevScrollY.current = scrollY.current
+      }
+    }
+
     window.addEventListener('scroll', scrollListener)
     return () => {
       window.removeEventListener('scroll', scrollListener)
@@ -92,7 +92,7 @@ const Header: NextComponentType = () => {
               </a>
             </Link>
           </div>
-          {/* <div>
+          <div>
             <div className={styles.categories__wrapper}>
               <Link href="/">
                 <a className={router.pathname === '/' ? styles.active : styles.inactive}>기록</a>
@@ -132,7 +132,7 @@ const Header: NextComponentType = () => {
                 }
               />
             </div>
-          </div> */}
+          </div>
         </div>
       </header>
       <header className={styles.header} />
