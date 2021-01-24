@@ -50,15 +50,15 @@ const Header: NextComponentType = () => {
     }
   }, [])
 
-  const throttledListener = useCallback((): void => {
-    if (!throttle.current) {
-      setTimeout(() => {
-        scrollListener()
-        throttle.current = false
-      }, 8)
-    }
-    throttle.current = true
-  }, [])
+  // const throttledListener = useCallback((): void => {
+  //   if (!throttle.current) {
+  //     setTimeout(() => {
+  //       scrollListener()
+  //       throttle.current = false
+  //     }, 8)
+  //   }
+  //   throttle.current = true
+  // }, [])
 
   useEffect(() => {
     if (headerRef.current != null) {
@@ -71,9 +71,9 @@ const Header: NextComponentType = () => {
   }, [router.pathname])
 
   useEffect(() => {
-    window.addEventListener('scroll', throttledListener)
+    window.addEventListener('scroll', scrollListener)
     return () => {
-      window.removeEventListener('scroll', throttledListener)
+      window.removeEventListener('scroll', scrollListener)
     }
   }, [])
 
