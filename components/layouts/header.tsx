@@ -9,8 +9,8 @@ const Header: NextComponentType = () => {
   const scrollY = useRef(0)
   const prevScrollY = useRef(0)
   const headerRef = useRef<HTMLHeadingElement>(null)
-  const [nextHeaderMarginTop, setNextHeaderMarginTop] = useState(0)
-  const throttle = useRef(false)
+  const [headerMarginTop, setHeaderMarginTop] = useState(0)
+  // const throttle = useRef(false)
 
   const router = useRouter()
 
@@ -26,7 +26,7 @@ const Header: NextComponentType = () => {
 
   useEffect(() => {
     if (headerRef.current != null) {
-      setNextHeaderMarginTop(0)
+      setHeaderMarginTop(0)
     }
 
     if (null != headerRef.current && router.pathname !== '/log/[id]') {
@@ -66,7 +66,16 @@ const Header: NextComponentType = () => {
           }
         }
 
-        setNextHeaderMarginTop(nextHeaderMargin)
+        const start = Date.now()
+        const timer = requestAnimationFrame(function animateMargin(timestamp) {
+          const interval = Date.now() - start
+
+          setHeaderMarginTop(nextHeaderMargin)
+          // football.style.top = interval / 3 + 'px' // move element down
+
+          if (interval < 1000) requestAnimationFrame(animateMargin) // queue request for next frame
+        })
+
         prevScrollY.current = scrollY.current
       }
     }
@@ -82,7 +91,7 @@ const Header: NextComponentType = () => {
       <header
         className={styles.header_fixed}
         ref={headerRef}
-        style={{ marginTop: `${nextHeaderMarginTop}px` }}
+        style={{ marginTop: `${headerMarginTop}px` }}
       >
         <div className={`home__container`}>
           <div className={styles.logo__wrapper}>
