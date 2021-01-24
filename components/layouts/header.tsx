@@ -26,7 +26,7 @@ const Header: NextComponentType = () => {
     if (null != headerRef.current && router.pathname === '/log/[id]') {
       headerRef.current.style.background = '#ffffff'
     }
-  }, [router.pathname])
+  }, [router.pathname, headerRef.current])
 
   useEffect(() => {
     const scrollListener = (): void => {
