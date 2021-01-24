@@ -15,7 +15,7 @@ jobs:
       - run:  |          
           git config user.name luceinaltis
           git config user.email luceinaltis2020@naver.com
-          
+
       - uses: actions/cache@v2
         with:
           path: ~/.npm
@@ -25,6 +25,8 @@ jobs:
       - run: npm install
       - run: npm run build
       - run: touch out/CNAME && echo "www.luce.today" > out/CNAME
+      - name: 사이트맵 생성
+        run: node scripts/sitemap.js
       - run: git add -f out/
       - run: git commit -m "Deploy Next.js to gh-pages"
       - run: git push origin `git subtree split --prefix out master`:gh-pages --force

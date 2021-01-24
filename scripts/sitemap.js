@@ -12,10 +12,10 @@ const formatted = sitemap => prettier.format(sitemap, { parser: "html" });
 (async () => {
   const pages = await globby([
     // include
-    "pages/**/*.tsx",
-    "pages/*.tsx",
+    "out/**/*.html",
+    "out/*.html",
     // exclude
-    "!pages/_*.tsx"
+    "!out/_*.html"
   ]);
 
   
@@ -23,8 +23,8 @@ const formatted = sitemap => prettier.format(sitemap, { parser: "html" });
   ${pages
     .map(page => {
         const path = page
-        .replace("pages/", "")
-        .replace(".tsx", "")
+        .replace("out/", "")
+        .replace(".html", "")
         .replace(/\/index/g, "");
         
         const routePath = path === "index" ? "" : path;
@@ -50,5 +50,5 @@ const formatted = sitemap => prettier.format(sitemap, { parser: "html" });
     
     const formattedSitemap = formatted(generatedSitemap);
 
-    fs.writeFileSync("public/sitemap.xml", formattedSitemap, "utf8");
+    fs.writeFileSync("out/sitemap.xml", formattedSitemap, "utf8");
 })();
