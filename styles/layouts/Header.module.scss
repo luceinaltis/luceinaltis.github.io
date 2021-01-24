@@ -2,8 +2,9 @@
     display: block;
     width: 100%;
     position: fixed;
-    // transition: margin-top 30ms linear, box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out;
-    transition: box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    transition: margin-top 10ms linear, box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    // transition: box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    will-change:scroll-position;
     background: white;
     z-index: 1;
     color: rgb(104, 112, 120);
