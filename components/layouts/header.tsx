@@ -18,15 +18,15 @@ const Header: NextComponentType = () => {
       let nextHeaderMarginTop = 0
       scrollY.current = window.pageYOffset
 
-      if (scrollY.current < 10) {
-        headerRef.current.style.boxShadow = 'none'
-        if (router.pathname !== '/log/[id]') {
-          headerRef.current.style.background = '#f8f9fb'
-        }
-      } else {
-        headerRef.current.style.boxShadow = 'rgba(0, 0, 0, 0.08) 0px 0px 8px'
-        headerRef.current.style.background = '#ffffff'
-      }
+      // if (scrollY.current < 10) {
+      //   headerRef.current.style.boxShadow = 'none'
+      //   if (router.pathname !== '/log/[id]') {
+      //     headerRef.current.style.background = '#f8f9fb'
+      //   }
+      // } else {
+      //   headerRef.current.style.boxShadow = 'rgba(0, 0, 0, 0.08) 0px 0px 8px'
+      //   headerRef.current.style.background = '#ffffff'
+      // }
 
       const height = headerRef.current.getBoundingClientRect().height
       const headerMarginTop = parseInt(headerRef.current.style.marginTop)

@@ -1,5 +1,5 @@
 .header_fixed {
-    display: flex;
+    display: block;
     width: 100%;
     position: fixed;
     // transition: margin-top 30ms linear, box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out;
@@ -10,7 +10,7 @@
 }
 
 .header {
-    display: flex;
+    display: block;
     height: 8.5rem;
     width: 100%;
     align-items: center;
