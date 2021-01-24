@@ -29,7 +29,7 @@
     width: 100%;
     height: 5rem;
     font-size: 1.15rem;
-    font-weight: bold;
+    font-weight: 700;
     color: rgb(220, 225, 220);
 
     a:hover{
@@ -40,7 +40,8 @@
 
 .desc__log {
     font-size: .8rem;
-    font-weight: 600;
+    font-weight: 500;
+    color: rgb(200, 205, 210);
 }
 
 /* 2개 */
@@ -54,6 +55,15 @@
 @media only screen and (max-width: 768px) {
     .title__wrapper {
         font-size: 1rem;
+        height: 3rem;
+    }
+
+    .desc__log {
+        font-size: .75rem;
+    }
+
+    .tag__info {
+        padding: 1rem .5rem .5rem .5rem;
     }
 }
 
