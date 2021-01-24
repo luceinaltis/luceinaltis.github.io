@@ -8,25 +8,14 @@ import styles from '../../styles/layouts/Header.module.scss'
 const Header: NextComponentType = () => {
   const scrollY = useRef(0)
   const prevScrollY = useRef(0)
+  const throttle = useRef(false)
   const headerRef = useRef<HTMLHeadingElement>(null)
-  const [headerMarginTop, setHeaderMarginTop] = useState(0)
-  // const throttle = useRef(false)
 
   const router = useRouter()
 
-  // const throttledListener = useCallback((): void => {
-  //   if (!throttle.current) {
-  //     setTimeout(() => {
-  //       scrollListener()
-  //       throttle.current = false
-  //     }, 20)
-  //   }
-  //   throttle.current = true
-  // }, [])
-
   useEffect(() => {
     if (headerRef.current != null) {
-      setHeaderMarginTop(0)
+      headerRef.current.style.marginTop = `0px`
     }
 
     if (null != headerRef.current && router.pathname !== '/log/[id]') {
@@ -82,9 +71,19 @@ const Header: NextComponentType = () => {
       }
     }
 
-    window.addEventListener('scroll', scrollListener)
+    const throttledListener = useCallback((): void => {
+      if (!throttle.current) {
+        setTimeout(() => {
+          scrollListener()
+          throttle.current = false
+        }, 16)
+      }
+      throttle.current = true
+    }, [])
+
+    window.addEventListener('scroll', throttledListener)
     return () => {
-      window.removeEventListener('scroll', scrollListener)
+      window.removeEventListener('scroll', throttledListener)
     }
   }, [])
 
