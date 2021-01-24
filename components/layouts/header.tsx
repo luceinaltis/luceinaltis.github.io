@@ -13,8 +13,9 @@ const Header: NextComponentType = () => {
   const throttle = useRef(false)
 
   const router = useRouter()
+  const height = 128
 
-  const scrollListener = useCallback((): void => {
+  const scrollListener = (): void => {
     if (null != headerRef.current) {
       scrollY.current = window.pageYOffset
 
@@ -28,7 +29,7 @@ const Header: NextComponentType = () => {
         headerRef.current.style.background = '#ffffff'
       }
 
-      const height = headerRef.current.getBoundingClientRect().height
+      // const height = headerRef.current.getBoundingClientRect().height
       const headerMarginTop = parseInt(headerRef.current.style.marginTop)
       let nextHeaderMargin = 0
       if (prevScrollY.current < scrollY.current && headerMarginTop <= 0) {
@@ -48,17 +49,17 @@ const Header: NextComponentType = () => {
       setNextHeaderMarginTop(nextHeaderMargin)
       prevScrollY.current = scrollY.current
     }
-  }, [])
+  }
 
-  const throttledListener = useCallback((): void => {
-    if (!throttle.current) {
-      setTimeout(() => {
-        scrollListener()
-        throttle.current = false
-      }, 20)
-    }
-    throttle.current = true
-  }, [])
+  // const throttledListener = useCallback((): void => {
+  //   if (!throttle.current) {
+  //     setTimeout(() => {
+  //       scrollListener()
+  //       throttle.current = false
+  //     }, 20)
+  //   }
+  //   throttle.current = true
+  // }, [])
 
   useEffect(() => {
     if (headerRef.current != null) {
@@ -71,9 +72,9 @@ const Header: NextComponentType = () => {
   }, [router.pathname])
 
   useEffect(() => {
-    window.addEventListener('scroll', throttledListener)
+    window.addEventListener('scroll', scrollListener)
     return () => {
-      window.removeEventListener('scroll', throttledListener)
+      window.removeEventListener('scroll', scrollListener)
     }
   }, [])
 
