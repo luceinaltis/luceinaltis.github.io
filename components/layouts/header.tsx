@@ -1,5 +1,5 @@
 import { NextComponentType } from 'next'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 
@@ -13,6 +13,53 @@ const Header: NextComponentType = () => {
   const throttle = useRef(false)
   const router = useRouter()
 
+  const scrollListener = useCallback((): void => {
+    if (null != headerRef.current) {
+      let nextHeaderMarginTop = 0
+      scrollY.current = window.pageYOffset
+
+      if (scrollY.current < 10) {
+        headerRef.current.style.boxShadow = 'none'
+        if (router.pathname !== '/log/[id]') {
+          headerRef.current.style.background = '#f8f9fb'
+        }
+      } else {
+        headerRef.current.style.boxShadow = 'rgba(0, 0, 0, 0.08) 0px 0px 8px'
+        headerRef.current.style.background = '#ffffff'
+      }
+
+      const height = headerRef.current.getBoundingClientRect().height
+      const headerMarginTop = parseInt(headerRef.current.style.marginTop)
+
+      if (prevScrollY.current < scrollY.current && headerMarginTop <= 0) {
+        // 아래 스크롤
+        nextHeaderMarginTop = headerMarginTop - (scrollY.current - prevScrollY.current)
+      } else if (headerMarginTop < -height) {
+        // 위 스크롤(아예 안보일 때)
+        nextHeaderMarginTop = -height
+      } else if (headerMarginTop < 0) {
+        // 위 스크롤(조금 보일 때)
+        nextHeaderMarginTop = headerMarginTop + (-scrollY.current + prevScrollY.current)
+        if (nextHeaderMarginTop > 0) {
+          nextHeaderMarginTop = 0
+        }
+      }
+
+      headerRef.current.style.marginTop = `${nextHeaderMarginTop}px`
+      prevScrollY.current = scrollY.current
+    }
+  }, [])
+
+  const throttledListener = useCallback((): void => {
+    if (!throttle.current) {
+      setTimeout(() => {
+        scrollListener()
+        throttle.current = false
+      }, 8)
+    }
+    throttle.current = true
+  }, [])
+
   useEffect(() => {
     if (headerRef.current != null) {
       headerRef.current.style.marginTop = '0px'
@@ -24,53 +71,6 @@ const Header: NextComponentType = () => {
   }, [router.pathname])
 
   useEffect(() => {
-    const scrollListener = (): void => {
-      if (null != headerRef.current) {
-        let nextHeaderMarginTop = 0
-        scrollY.current = window.pageYOffset
-
-        if (scrollY.current < 10) {
-          headerRef.current.style.boxShadow = 'none'
-          if (router.pathname !== '/log/[id]') {
-            headerRef.current.style.background = '#f8f9fb'
-          }
-        } else {
-          headerRef.current.style.boxShadow = 'rgba(0, 0, 0, 0.08) 0px 0px 8px'
-          headerRef.current.style.background = '#ffffff'
-        }
-
-        const height = headerRef.current.getBoundingClientRect().height
-        const headerMarginTop = parseInt(headerRef.current.style.marginTop)
-
-        if (prevScrollY.current < scrollY.current && headerMarginTop <= 0) {
-          // 아래 스크롤
-          nextHeaderMarginTop = headerMarginTop - (scrollY.current - prevScrollY.current)
-        } else if (headerMarginTop < -height) {
-          // 위 스크롤(아예 안보일 때)
-          nextHeaderMarginTop = -height
-        } else if (headerMarginTop < 0) {
-          // 위 스크롤(조금 보일 때)
-          nextHeaderMarginTop = headerMarginTop + (-scrollY.current + prevScrollY.current)
-          if (nextHeaderMarginTop > 0) {
-            nextHeaderMarginTop = 0
-          }
-        }
-
-        headerRef.current.style.marginTop = `${nextHeaderMarginTop}px`
-        prevScrollY.current = scrollY.current
-      }
-    }
-
-    const throttledListener = (): void => {
-      scrollListener()
-      // if (!throttle.current) {
-      //   setTimeout(() => {
-      //     throttle.current = false
-      //   }, 30)
-      // }
-      // throttle.current = true
-    }
-
     window.addEventListener('scroll', throttledListener)
     return () => {
       window.removeEventListener('scroll', throttledListener)
