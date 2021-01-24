@@ -71,7 +71,7 @@ const Header: NextComponentType = () => {
       }
     }
 
-    const throttledListener = useCallback((): void => {
+    const throttledListener = (): void => {
       if (!throttle.current) {
         setTimeout(() => {
           scrollListener()
@@ -79,7 +79,7 @@ const Header: NextComponentType = () => {
         }, 16)
       }
       throttle.current = true
-    }, [])
+    }
 
     window.addEventListener('scroll', throttledListener)
     return () => {
