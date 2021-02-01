@@ -7,11 +7,12 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    -webkit-transform: translateZ(0);
-    -moz-transform: translateZ(0);
-    -ms-transform: translateZ(0);
-    -o-transform: translateZ(0);
-    transform: translateZ(0);
+    // -moz-transform: translateZ(0);
+    // -ms-transform: translateZ(0);
+    // -o-transform: translateZ(0);
+    // transform: translateZ(0);
+    // -webkit-transform: translateZ(0);
+    -webkit-transform:translate3d(0,0,0);
     transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
     -webkit-backface-visibility: hidden;
     -webkit-transform-style: preserve-3d;
