@@ -25,7 +25,7 @@ const Post: NextPage<Props> = ({ postData }) => {
 
   useEffect(() => {
     const scriptTag = document.createElement('script')
-    scriptTag.src = '/static/prism.js'
+    scriptTag.src = '/prism.js'
     document.body.appendChild(scriptTag)
   }, [])
 

@@ -1,5 +1,5 @@
 import '../styles/globals.scss'
-import '../static/prism.css'
+import '../public/prism.css'
 
 import { AppProps } from 'next/app'
 import Head from 'next/head'
