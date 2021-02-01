@@ -21,9 +21,9 @@ const HomeTemplate = ({
     <div className={styles.post__wrapper}>
       <div className={styles.post__wrapper__inner}>
         <a href={`/log/${id}`} className={styles.post__thumbnail}>
-          <div>
-            <img src={thumbnail} alt={title} />
-          </div>
+          {/* <div> */}
+          <img src={thumbnail} alt={title} />
+          {/* </div> */}
         </a>
         <div className={styles.post__info}>
           <a href={`/log/${id}`}>

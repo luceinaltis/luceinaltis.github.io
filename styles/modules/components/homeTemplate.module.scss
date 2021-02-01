@@ -20,7 +20,7 @@
     -ms-backface-visibility: hidden;
     will-change: scroll-position;
 
-    img {
+    * {
         -webkit-transform: translate3d(0,0,0);
     }
     
