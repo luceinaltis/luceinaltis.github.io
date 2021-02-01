@@ -1,10 +1,19 @@
 @import "reset.scss";
 @import url(//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css);
 
+
 @font-face {
-  font-family: "Omni Gulim";
+  font-family: Omni Gulim;
+  src: url("./fonts/gulim.woff2") format("woff2"),
+  url("./fonts/gulim.woff") format("woff");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: Omni Gulim;
   src: url("./fonts/Omni-Gulim.woff2") format("woff2"),
        url("./fonts/Omni-Gulim.woff") format("woff");
+  font-weight:  normal;
 }
 
 html,
@@ -116,7 +125,7 @@ article {
   word-break: keep-all;
   overflow-wrap: break-word;
   color: rgb(34, 36, 38);
-  font-size: 1.125rem;
+  font-size: 1.05rem;
   line-height: 1.7;
 
   a {
@@ -253,11 +262,7 @@ article {
 
 @media only screen and (max-width: 768px) {
   article {
-    font-size: 1rem;
-
-    p {
-      font-size: 1rem;
-    }
+    font-size: .925rem;
 
     h1, h2, h3, h4 {
       margin-bottom: 0.75rem;
