@@ -1,7 +1,7 @@
 import { NextPage, GetStaticPaths, GetStaticProps } from 'next'
 import Head from 'next/head'
 import { parseISO, format } from 'date-fns'
-import { useEffect } from 'react'
+import { useEffect, useLayoutEffect, useRef } from 'react'
 
 import { getAllPostIds, getPostData } from '../../lib/posts'
 
@@ -24,9 +24,19 @@ const Post: NextPage<Props> = ({ postData }) => {
   const date = parseISO(postData.date)
 
   useEffect(() => {
-    const scriptTag = document.createElement('script')
-    scriptTag.src = '/prism.js'
-    document.body.appendChild(scriptTag)
+    const scriptTagFirst = document.createElement('script')
+    scriptTagFirst.src = '/prism.js'
+
+    document.body.appendChild(scriptTagFirst)
+    const scriptTagSecond = document.createElement('script')
+    const anchor = document.getElementById('comments')
+    scriptTagSecond.setAttribute('src', 'https://utteranc.es/client.js')
+    scriptTagSecond.setAttribute('crossorigin', 'anonymous')
+    scriptTagSecond.setAttribute('async', true)
+    scriptTagSecond.setAttribute('repo', 'luceinaltis/blog-comments')
+    scriptTagSecond.setAttribute('issue-term', 'pathname')
+    scriptTagSecond.setAttribute('theme', 'github-light')
+    anchor.appendChild(scriptTagSecond)
   }, [])
 
   return (
@@ -66,18 +76,8 @@ const Post: NextPage<Props> = ({ postData }) => {
         <article>
           <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
         </article>
-        <div className="utterances">
-          <iframe className="utterances-frame" frameBorder="0"></iframe>
-        </div>
+        <div id="comments"></div>
       </section>
-      <script
-        src="https://utteranc.es/client.js"
-        repo="luceinaltis/luceinaltis.github.io"
-        issue-term="pathname"
-        theme="github-light"
-        crossOrigin="anonymous"
-        async
-      ></script>
     </>
   )
 }
