@@ -32,11 +32,13 @@ const Post: NextPage<Props> = ({ postData }) => {
     const anchor = document.getElementById('comments')
     scriptTagSecond.setAttribute('src', 'https://utteranc.es/client.js')
     scriptTagSecond.setAttribute('crossorigin', 'anonymous')
-    scriptTagSecond.setAttribute('async', true)
+    scriptTagSecond.setAttribute('async', 'true')
     scriptTagSecond.setAttribute('repo', 'luceinaltis/blog-comments')
     scriptTagSecond.setAttribute('issue-term', 'pathname')
     scriptTagSecond.setAttribute('theme', 'github-light')
-    anchor.appendChild(scriptTagSecond)
+    if (anchor) {
+      anchor.appendChild(scriptTagSecond)
+    }
   }, [])
 
   return (
