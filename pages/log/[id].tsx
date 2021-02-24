@@ -66,7 +66,18 @@ const Post: NextPage<Props> = ({ postData }) => {
         <article>
           <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
         </article>
+        <div className="utterances">
+          <iframe className="utterances-frame" frameBorder="0"></iframe>
+        </div>
       </section>
+      <script
+        src="https://utteranc.es/client.js"
+        repo="luceinaltis/luceinaltis.github.io"
+        issue-term="pathname"
+        theme="github-light"
+        crossOrigin="anonymous"
+        async
+      ></script>
     </>
   )
 }
