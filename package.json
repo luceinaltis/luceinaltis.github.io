@@ -10,7 +10,7 @@
   "dependencies": {
     "@types/unist": "^2.0.3",
     "globby": "^11.0.2",
-    "next": "10.0.2",
+    "next": "13.5.0",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "rehype-stringify": "^8.0.0",
